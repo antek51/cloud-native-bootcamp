@@ -1,29 +1,34 @@
-.. title:: Nutanix Containerizing Apps & CI/CD Bootcamp
+.. title:: Atelier technique Nutanix Automatisation & Cloud Native 
 
 .. toctree::
    :maxdepth: 2
-   :name: _cicd
+   :name: cloud-native-automation
    :hidden:
 
    gettingstarted/gettingstarted
-   basic/basic
-   phase2/phase2
-   phase3/phase3
-   phase4/phase4
-   phase5/phase5
+   partie1/partie1
+   partie2/partie2
+   partie3/partie3
+   partie4/partie4
+   partie5/partie5
+   partie6/partie6
 
 ---------------------------------
-Atelier technique Nutanix Automatisation & Cloud Native 
+Atelier technique Nutanix 
+---------------------------------
+---------------------------------
+Automatisation & Cloud Native 
 ---------------------------------
 
-Description du bootcamp et des objectifs
+Description du bootcamp et des objectifs : 
 
 
 Agenda
 ++++++
 
-- Phase 1 : Déploiement automatisé d'une application de e-commerce depuis une marketplace 
-- Phase 2 : 
-- Phase 3 : 
-- Phase 4 : 
-- Phase 5 : 
+- Partie 1 : Déploiement automatisé d'une application de e-commerce depuis une marketplace 
+- Partie 2 : 
+- Partie 3 : 
+- Partie 4 : 
+- Partie 5 : 
+- Partie 6 : 
