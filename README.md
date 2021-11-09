@@ -1,1 +1,1 @@
-# cloud-native-bootcamp
+# Cloud Native and Automation Bootcamp
