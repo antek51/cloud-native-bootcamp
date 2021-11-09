@@ -1,8 +1,17 @@
-.. _phase3_container:
+.. _phase2_calm:
 
 ---------------------
-Building The Pipeline
+Création et déploiement d'une machine de dev/test
 ---------------------
+
+
+
+
+
+
+
+
+
 
 In this exercise you will develop and test your CI/CD pipeline, including:
 

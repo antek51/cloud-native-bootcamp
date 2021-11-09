@@ -1,8 +1,14 @@
-.. _phase5_era:
+.. _phase6_optional:
 
 ---------------------------------------
-Creating Development Databases with Era
+Labs optionnels
 ---------------------------------------
+
+
+
+
+
+
 
 While any developer in the organization could now spin up their own development environments using the CI/CD pipeline you've built, having them all point to the same "production" database is surely a recipe for disaster.
 
