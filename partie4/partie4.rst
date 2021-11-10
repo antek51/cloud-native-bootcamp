@@ -4,14 +4,35 @@
 Utilisation du service CaaS Nutanix Karbon
 ------------------------
 
+Dans ce module, nous allons utiliser le service **Nutanix Karbon**. 
+Ce service est **natif** dans Prism Central et compatible avec l'hyperviseur Nutanix AHV. 
+Karbon est la solution de gestion des clusters Kubernetes de production de Nutanix qui permet le provisionnement clé en main, les opérations et la gestion du cycle de vie de l'ensemble des couches d'infrastructure. Contrairement aux autres solutions Kubernetes, Karbon s'intègre de manière transparente à l'ensemble de la pile cloud native de Nutanix et simplifie considérablement Kubernetes sans verrouillage. Pour les clients Nutanix, Karbon est inclus dans toutes les éditions du logiciel AOS.
+
+Le déploiement d'un cluster Kubernetes 
+**lister les add-ons d'un cluster Karbon**
+
+
+Activation du service Nutanix Karbon
++++++++++++++++++++++++++
+
+#. Naviguer dans le menu "burger" dans **Services** puis **Karbon**. 
+#. Notez le message d'activation puis cliquer sur **"Enable Karbon"**
+
+   .. note::
+
+      L'activation du service prend quelques minutes. En tâche de fond, l'outil déploie 2 conteneurs dans la VM Prism Central. 
+      **karbon-ui** prend en charge l'interface graphique, les requêtes API du moteur Karbon. 
+      **karbon-core** est l'orchestrateur du runtime Kubernetes et tout ce qui est en r
 
 
 
 
 
 
-
-
+---
+---
+---
+---
 
 
 
