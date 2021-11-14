@@ -1,13 +1,18 @@
 .. _phase1_calm:
 
----------------------------------
+------------------------------------------------------------------------
 Publication et déploiement d'une application avancée sur une marketplace
----------------------------------
+------------------------------------------------------------------------
 
-Test Gautier
+Dans cette 1ère partie, nous allons faire connaissance avec Calm en clonant une application présente dans la marketplace, la modifier et la republier comme une nouvelle. 
 
+Cloner une applcation de la marketplace
++++++++++++++++++++++++++++++++++++++++
 
-
+#. Connectez vous sur PRISM Central avec votre utilisateur **USER** 
+#. Cliquez sur **Services > Calm**
+#. Sélectionnez l'icone Marketplace .. image:: imges/1.png   
+#. Cliquez sur l'application [à définir]
 
 
 
