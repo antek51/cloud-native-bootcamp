@@ -4,11 +4,27 @@
 Conteneurisation de l'application
 ------------------------
 
+Les conteneurs sont utilisés comme moyen pour délivrer des packages de logiciels qui incluent le code ainsi que toutes les dépendances dans une image. Cela permet à l'application d'être portable et ainsi d'être utilisé dans plusieurs environnements différents. 
+Dans cette section, nous allons **convertir l'application "Fiesta" en conteneur** pour être ensuite hébergée dans un cluster Kubernetes en lieu et place d'un hébergement traditionnel en machine virtuelle. 
 
 
+Analyse de l'application existante 
++++++++++++++++++++++++++
 
+Pour connaitre l'application, nous allons examiner le Blueprint Calm et ainsi découvrir comment elle est composée, installée et démarée. 
 
-
+#. Aller dans **PrismCentral** et sélectionner le service **Calm**.
+#. Depuis la barre de menu latéral, cliquer sur **Blueprints**.
+#. Cliquer sur le Blueprint de l'application Fiesta.
+#. Vous découvrez alors les **2 services** qui composent cette application. 
+  .. figure:: images/calm1.jpg
+#. Cliquer sur le service **"Fiesta_App_VM"**.
+#. Vous pouvez inspecter la configuration de la VM sur le panneau de droite (taille, personnalisation du système d'exploitation, réseaux, catégories, ...).
+#. Cliquer ensuite sur **"Package"** puis sur **"Configure Install"** permettant de visualiser les étapes de configuration. 
+  .. figure:: images/calm2.jpg
+  .. figure:: images/calm3.jpg  
+#. Parcourir chacune des étapes en analysant la composition des différents scripts. Parcourez également les menus déroulants pour imaginer les possibilités offertes par l'outils. 
+  .. figure:: images/calm4.jpg  
 
 
 While the CI/CD pipeline is now capable of automating the build, test, upload to your Docker Hub registry, and deployment steps, you may have noticed it still takes multiple minutes for the **Fiesta_App** to be ready for use. In environments where you could see thousands of code pushes per day, *minutes matter!*
