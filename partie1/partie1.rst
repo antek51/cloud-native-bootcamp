@@ -6,13 +6,34 @@ Publication et déploiement d'une application avancée sur une marketplace
 
 Dans cette 1ère partie, nous allons faire connaissance avec Calm en clonant une application présente dans la marketplace, la modifier et la republier comme une nouvelle. 
 
-Cloner une applcation de la marketplace
-+++++++++++++++++++++++++++++++++++++++
+Cloner une application de la marketplace
+++++++++++++++++++++++++++++++++++++++++
 
 #. Connectez vous sur PRISM Central avec votre utilisateur **USER** 
+
 #. Cliquez sur **Services > Calm**
-#. Sélectionnez l'icone Marketplace .. image:: imges/1.png   
-#. Cliquez sur l'application [à définir]
+
+#. Sélectionnez l'icone Marketplace 
+    .. image:: images/1.png
+       :alt: icône panier   
+
+#. Cliquez sur le bouton **Get** de l'application **Exemple**
+
+#. Cliquez sur **Clone**
+
+#. Renseignez les informations suivantes pour le blueprint :
+    - Nom : **<Initiales>_Fiesta**
+    - Projet : **<Vote projet>** 
+
+Vous voilà avec un blueprint issu de l'application de la marketplace, nous allons pouvoir le modifier pour en faire notre propre application.
+
+Modification du blueprint
++++++++++++++++++++++++++
+
+
+
+
+
 
 
 
