@@ -5,6 +5,7 @@ Conteneurisation de l'application
 ------------------------
 
 Les conteneurs sont utilisés comme moyen pour délivrer des packages de logiciels qui incluent le code ainsi que toutes les dépendances dans une image. Cela permet à l'application d'être portable et ainsi d'être utilisé dans plusieurs environnements différents. 
+
 Dans cette section, nous allons **convertir l'application "Fiesta" en conteneur** pour être ensuite hébergée dans un cluster Kubernetes en lieu et place d'un hébergement traditionnel en machine virtuelle. 
 
 
@@ -14,41 +15,63 @@ Analyse de l'application existante
 Pour connaitre l'application, nous allons examiner le Blueprint Calm et ainsi découvrir comment elle est composée, installée et démarée. 
 
 #. Aller dans **PrismCentral** et sélectionner le service **Calm**.
+
 #. Depuis la barre de menu latéral, cliquer sur **Blueprints**.
+
 #. Cliquer sur le Blueprint de l'application Fiesta.
+
 #. Vous découvrez alors les **2 services** qui composent cette application. 
-  .. figure:: images/calm1.jpg
+   .. figure:: images/calm1.jpg
+
 #. Cliquer sur le service **"Fiesta_App_VM"**.
+
 #. Vous pouvez inspecter la configuration de la VM sur le panneau de droite (taille, personnalisation du système d'exploitation, réseaux, catégories, ...).
+
 #. Cliquer ensuite sur **"Package"** puis sur **"Configure Install"** permettant de visualiser les étapes de configuration. 
-  .. figure:: images/calm2.jpg
-  .. figure:: images/calm3.jpg  
+
+   .. figure:: images/calm2.jpg
+
+   .. figure:: images/calm3.jpg
+
 #. Parcourir chacune des étapes en analysant la composition des différents scripts. Parcourez également les menus déroulants pour imaginer les possibilités offertes par l'outils. 
-  .. figure:: images/calm4.jpg  
 
+   .. figure:: images/calm4.jpg  
 
-While the CI/CD pipeline is now capable of automating the build, test, upload to your Docker Hub registry, and deployment steps, you may have noticed it still takes multiple minutes for the **Fiesta_App** to be ready for use. In environments where you could see thousands of code pushes per day, *minutes matter!*
-
-As you add additional containerized services to the pipeline, where operations are executed begin to have a significant impact on optimizing the build and deployment times of your application.
-
-Currently, the container clones and builds the application source code *after* the container starts. We can shift these operations into the container image build process to decrease the time required for the running container to become ready.
-
-In this exercise you will:
-
-   - Update the **dockerfile** to include the Fiesta installation commands
-   - Update **runapp.sh** to remove the Fiesta installation commands
-   - Update **.drone.yml** to remove irrelevant image test commands
-   - Test your updated build
-
-Updating Fiesta_App Files
+Construction du conteneur 
 +++++++++++++++++++++++++
 
-#. Return to your **Visual Studio Code (Local)** window and open **dockerfile**.
+Dans cette section nous allons construire notre **conteneur avec l'application Fiesta et ses dépendances**.
 
-#. Overwrite **ALL** of the contents of the file with the following:
+Nous utiliserons :  
+
+   - Un **dockerfile** qui contiendra toutes les commandes à effectuer pour assembler une **image Docker**. 
+   - **Docker build** pour réaliser le travail de construction de l'image.
+   - Une **registry** permettant de mettre à disposition l'image dans une "bibliothèque" d'images privées
+
+
+Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé préalablement. 
+
+#. Dans **PrismCentral**, naviguer vers **"Compute & Storage"** puis **"VMs"**
+
+#. Rechercher votre machine avec la nomenclature suivante : **user##-docker_vm**
+
+#. Ouvrir une session SSH sur la machine avec le login suivant : 
+   - **Login** - centos
+   - **Password** - nutanix/4u
+
+#. Créer un répertoire ``mkdir github`` suivit de ``cd github``.
+
+#. Executer un clone du repository ``git clone https://github.com/sharonpamela/Fiesta`` pour disposer d'une **copie locale du code de l'application**. 
+
+#. Nous allons commencer à écrire notre **dockerfile**, créer le fichier ``vi dockerfile`` avec l'éditeur **vi**. 
+
+   .. note:: Vous pouvez utiliser l'éditeur de texte de votre choix.
+
+#. Taper **i** ou **insert** pour commencer à ajouter du texte dans le **dockerfile**. 
+
+#. Copier et coller le contenu suivant : 
 
    .. code-block:: yaml
-
       # This dockerfile multi step is to start the container faster as the runapp.sh doesn't have to run all npm steps
 
       # Grab the Alpine Linux OS image and name the container base
@@ -93,125 +116,45 @@ Updating Fiesta_App Files
       ENTRYPOINT [ "/code/runapp.sh"]
       EXPOSE 3001 3000
 
-#. Save the file.
+#. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
-   .. note::
+#. Créer le fichier **runapp.sh** en tapant ``vi runapp.sh``.
 
-      We will **NOT** push the changes until all files have been updated.
+#. Taper **i** ou **insert** pour commencer à ajouter du texte dans le fichier **runapp.sh**.
 
-   Now we see that the Fiesta application source code will be cloned and built on the Docker VM and *then* copied into the container on the ``COPY --from=base /code /code`` line.
+#. Copier et coller le contenu suivant : 
 
-   Not only will this decrease the start time of the application, it will also decrease the total size. This is because many additional *temporary* packages are downloaded by **npm** as part of the build process which are not automatically removed after the build has completed.
-
-#. Open **runapp.sh** and overwrite **ALL** of the contents of the file with the following:
+   .. note:: Remplacer la variable **$DB_SERVER** par l'adresse IP de votre VM user##-MariaDB_VM 
 
    .. code-block:: bash
-
       #!/bin/sh
-
-      # If there is a "/" in the password or username we need to change it otherwise sed goes haywire
-      if [ `echo $DB_PASSWD | grep "/" | wc -l` -gt 0 ]
-          then
-              DB_PASSWD1=$(echo "${DB_PASSWD//\//\\/}")
-          else
-              DB_PASSWD1=$DB_PASSWD
-      fi
-
-      if [ `echo $DB_USER | grep "/" | wc -l` -gt 0 ]
-          then
-              DB_USER1=$(echo "${DB_USER//\//\\/}")
-          else
-              DB_USER1=$DB_USER
-      fi
-
       # Change the Fiesta configuration code so it works in the container
-      sed -i "s/REPLACE_DB_NAME/$DB_NAME/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_NAME/FiestaDB/g" /code/Fiesta/config/config.js
       sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_DIALECT/$DB_TYPE/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_USER_NAME/$DB_USER1/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_PASSWORD/$DB_PASSWD1/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_DIALECT/mysql/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_USER_NAME/fiesta/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_PASSWORD/fiesta/g" /code/Fiesta/config/config.js
 
       # Run the NPM Application
       cd /code/Fiesta
       npm start
 
-#. Save the file.
+#. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
-   The only thing the start-up script for our container is now responsible for is updating the **config.js** file with the environment variables and starting the application.
+#. Le dossier comprend un fichier **dockerfile** permettant de donner les insctructions sur la manière de construire l'image, le fichier **runapp.sh** permettant de configurer et lancer l'application et le dossier **Fiesta** qui contient l'application. 
+L'arborescence du dossier doit maintenant être équivalent à ceci : 
 
-#. Open **.drone.yml**.
+   .. figure:: images/docker2.jpg  
 
-#. Under **steps > name: Test local built container > commands**, remove the line ``- git clone https://github.com/sharonpamela/Fiesta /code/Fiesta``.
 
-   .. figure:: images/5.png
+#. Il est temps de packager son image docker avec la commande suivante : ``docker build -t user##-fiesta-app:1.0``
 
-   This test is no longer needed as the source code as is now being cloned from GitHub outside of the container image.
+#. La commande ``docker image ls`` indique que l'image a bien été créée. 
 
-#. Save the file.
+#. Nous allons maintenant pousser l'application dans la registry pour permettre de l'utiliser depuis notre cluster Karbon avec la commande ``docker push IP-REGISTRY:5000/user##-fiesta-app:1.0``
 
-Testing The Optimizations
-+++++++++++++++++++++++++
+#. Avant de passer à l'étape suivante, il est utile de tester le conteneur grâce à la commande ``docker run -d --rm -p 5000:3000 IP-REGISTRY:5000/user##-fiesta-app:1.0``
 
-#. Commit and push your 3 updated files to your **Gitea** repo.
+#. Ouvrir un navigateur vers l'adresse ``http://IP-DOCKER-VM:3000``
 
-#. In **Drone > nutanix/Fiesta_Application > ACTIVITY FEED**, note the the **build test image** stage now takes significantly longer as this is where we have shifted a majority of the operations.
-
-   .. figure:: images/1.png
-
-   This is a reasonable trade-off as for every build in an environment, you will likely have multiple deployments (development environments, user acceptance testing, production, etc.).
-
-#. After the **Deploy newest image** stage is complete, return to your **Visual Studio Code (Docker VM SSH)** window and open the **Terminal**.
-
-   .. note:: Alternatively, you can SSH to your Docker VM using PuTTY or Terminal.
-
-#. Run ``docker image ls`` to list the images.
-
-   .. figure:: images/3.png
-
-   In the example above, the size of the image decreased by nearly 100MB. Again this is due to eliminating all of the additional temporary packages downloaded by **npm** when performing the application build inside of the container.
-
-   Next we'll test how quickly the new image is able to start the Fiesta app.
-
-#. Run ``docker stop Fiesta_App`` to stop and remove your container.
-
-#. You can run ``docker ps --all`` to validate **Fiesta_App** container is no longer present.
-
-   You should expect to see only your **drone**, **drone-runner-docker**, **gitea**, and **mysql** containers.
-
-#. Copy and paste the script below into a temporary text file and update the **DB_SERVER** and **USERNAME** variables to match your environment and **Docker Hub** account.
-
-   .. code-block:: bash
-
-      DB_SERVER=<IP ADDRESS OF MARIADB VM>
-      DB_NAME=FiestaDB
-      DB_USER=fiesta
-      DB_PASSWD=fiesta
-      DB_TYPE=mysql
-      USERNAME=<DOCKERHUB USERNAME>
-      docker run --name Fiesta_App --rm -p 5000:3000 -d -e DB_SERVER=$DB_SERVER -e DB_USER=$DB_USER -e DB_TYPE=$DB_TYPE -e DB_PASSWD=$DB_PASSWD -e DB_NAME=$DB_NAME $USERNAME/fiesta_app:latest && docker logs --follow Fiesta_App
-
-#. Paste the updated script into your SSH terminal session and press **Return** to execute the final command.
-
-   The app should start in ~15 seconds, as indicated by ``You can now view client in the browser`` output from your terminal session. *That's significantly faster than the 3+ minutes it took previously!*
-
-#. Optionally, if you want to compare the start time of your previous build:
-
-   - Press **CTRL+C** to stop the ``docker log`` command
-   - Run ``docker stop Fiesta_App``
-   - Run ``docker image ls`` and note the **TAG** of one of your previous versions of the image, as indicated by its larger file size
-
-      .. figure:: images/6.png
-
-   - In the following command, replace **LATEST** with the **TAG** value from the previous step run ``docker run --name Fiesta_App --rm -p 5000:3000 -d -e DB_SERVER=$DB_SERVER -e DB_USER=$DB_USER -e DB_TYPE=$DB_TYPE -e DB_PASSWD=$DB_PASSWD -e DB_NAME=$DB_NAME $USERNAME/fiesta_app:LATEST && docker logs --follow Fiesta_App``
-
-   - Run the command
-
-   This version should take *much* longer than the optimized container image.
-
-.. raw:: html
-
-    <H1><font color="#B0D235"><center>Congratulations!</center></font></H1>
-
-You've addressed the final issue in our CI/CD pipeline by optimizing the time it takes to deploy the application from the Docker container. :fa:`thumbs-up` What now?
-
-Up to this point in the lab, every build has been dependent on the pre-deployed "production" version of our MariaDB database. In the next exercise, we'll take advantage of **Nutanix Era** to provide database cloning as part of the pipeline.
+   .. figure:: images/fiesta.jpg  
