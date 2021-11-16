@@ -1,7 +1,7 @@
 .. _phase2_calm:
 
 ---------------------
-Création et déploiement d'une machine de dev/test
+2. Création et déploiement d'une machine de dev/test
 ---------------------
 
 

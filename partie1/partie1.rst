@@ -1,7 +1,7 @@
 .. _phase1_calm:
 
 ------------------------------------------------------------------------
-Publication et déploiement d'une application avancée sur une marketplace
+1. Publication et déploiement d'une application avancée sur une marketplace
 ------------------------------------------------------------------------
 
 Dans cette 1ère partie, nous allons faire connaissance avec Calm en clonant une application présente dans la marketplace, la modifier et la republier comme une nouvelle. 

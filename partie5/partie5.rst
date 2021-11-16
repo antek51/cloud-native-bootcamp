@@ -1,7 +1,7 @@
 .. _phase5_marketplace:
 
 ---------------------------------------
-Mise à jour de l'application au sein de la marketplace
+5. Mise à jour de l'application au sein de la marketplace
 ---------------------------------------
 
 While any developer in the organization could now spin up their own development environments using the CI/CD pipeline you've built, having them all point to the same "production" database is surely a recipe for disaster.

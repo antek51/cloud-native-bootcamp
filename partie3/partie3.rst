@@ -1,7 +1,7 @@
 .. _phase3_container:
 
 ------------------------
-Conteneurisation de l'application
+3. Conteneurisation de l'application
 ------------------------
 
 Les conteneurs sont utilisés comme moyen pour délivrer des packages de logiciels qui incluent le code ainsi que toutes les dépendances dans une image. Cela permet à l'application d'être portable et ainsi d'être utilisé dans plusieurs environnements différents. 
@@ -126,23 +126,23 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
 
    .. note:: Remplacer la variable **$DB_SERVER** par l'adresse IP de votre VM user##-MariaDB_VM 
 
-   .. code-block:: bash
-      #!/bin/sh
-      # Change the Fiesta configuration code so it works in the container
-      sed -i "s/REPLACE_DB_NAME/FiestaDB/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_DIALECT/mysql/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_USER_NAME/fiesta/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_PASSWORD/fiesta/g" /code/Fiesta/config/config.js
 
-      # Run the NPM Application
-      cd /code/Fiesta
-      npm start
+   .. code-block:: bash
+         #!/bin/sh
+         # Change the Fiesta configuration code so it works in the container
+         sed -i "s/REPLACE_DB_NAME/FiestaDB/g" /code/Fiesta/config/config.js
+         sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
+         sed -i "s/REPLACE_DB_DIALECT/mysql/g" /code/Fiesta/config/config.js
+         sed -i "s/REPLACE_DB_USER_NAME/fiesta/g" /code/Fiesta/config/config.js
+         sed -i "s/REPLACE_DB_PASSWORD/fiesta/g" /code/Fiesta/config/config.js
+
+         # Run the NPM Application
+         cd /code/Fiesta
+         npm start
 
 #. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
-#. Le dossier comprend un fichier **dockerfile** permettant de donner les insctructions sur la manière de construire l'image, le fichier **runapp.sh** permettant de configurer et lancer l'application et le dossier **Fiesta** qui contient l'application. 
-L'arborescence du dossier doit maintenant être équivalent à ceci : 
+#. Le dossier comprend un fichier **dockerfile** permettant de donner les insctructions sur la manière de construire l'image, le fichier **runapp.sh** permettant de configurer et lancer l'application et le dossier **Fiesta** qui contient l'application. L'arborescence du dossier doit maintenant être équivalent à ceci : 
 
    .. figure:: images/docker2.jpg  
 
