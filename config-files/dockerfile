@@ -1,0 +1,43 @@
+# This dockerfile multi step is to start the container faster as the runapp.sh doesn't have to run all npm steps
+
+# Grab the Alpine Linux OS image and name the container base
+FROM 10.42.108.45:5000/alpine:latest as base
+
+# Install needed packages
+RUN apk add --no-cache --update nodejs npm git
+
+# Create and set the working directory
+RUN mkdir /code
+WORKDIR /code
+
+# Get the Fiesta Application in the container
+RUN git clone https://github.com/sharonpamela/Fiesta.git /code/Fiesta
+
+# Get ready to install and build the application
+RUN cd /code/Fiesta && npm install
+RUN cd /code/Fiesta/client && npm install
+RUN cd /code/Fiesta/client && npm audit fix
+RUN cd /code/Fiesta/client && npm fund
+RUN cd /code/Fiesta/client && npm update
+RUN cd /code/Fiesta/client && npm run build
+
+# Grab the Alpine Linux OS image and name it Final_Image
+FROM 10.42.108.45:5000/alpine:latest as Final_Image
+
+# Install some needed packages
+RUN apk add --no-cache --update nodejs npm mysql-client
+
+# Get the NMP nodemon and install it
+RUN npm install -g nodemon
+
+# Copy the earlier created application from the first step into the new container
+COPY --from=base /code /code
+
+# Copy the starting app
+COPY runapp.sh /code
+RUN chmod +x /code/runapp.sh
+WORKDIR /code
+
+# Start the application
+ENTRYPOINT [ "/code/runapp.sh"]
+EXPOSE 3001 3000
