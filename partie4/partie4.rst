@@ -38,6 +38,8 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
 
 #. Créer maintenant votre cluster Kubernetes grâce au bouton **Create Kubernetes Cluster** 
 
+   .. figure:: images/karbon1.jpg
+
 #. Etape 1 : Selectionner un cluster de type **Development** pour des raisons simples de ressources disponibles sur la plateforme. 
 
    .. note::
@@ -47,22 +49,92 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
       Un cluster de type **Production** consomme un minimum de 5 VMs : 2 Master, 3 etcs, 1 Worker. 
 
 
-#. Etape 2 : 
+#. Etape 2 : Configuration générale
       - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user##-karbon**
       - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
       - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
       - Renseigner l'image Host OS à utiliser (**Selectionner la version la plus récente**)
 
+   .. figure:: images/karbon2.jpg
+
+#. Etape 3 : Configuration des noeuds 
+      - Nous allons installer le cluster Karbon sur le réseau **Secondary** 
+      - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
+
+   .. figure:: images/karbon3.jpg
+
+#. Etape 4 : Configuration du réseau interne 
+Cette étape permet de choisir le provider CNI de notre choix. Aujourd'hui Calico et Flannel sont intégrés nativement. D'autres CNI sont étudiés pour apporter d'avantage de choix pour les clients. 
+      - Choisir entre **Flannel** ou **Calico** (cela n'a pas d'impact sur la suite sur lab)
+
+   .. figure:: images/karbon4.jpg
+
+#. Etape 5 : Configuration de l'accès au stockage 
+      - Cette dernière partie va nous permettre de gérer la configuration de la couche de stockage "bloc" dont va pouvoir bénéficier le cluster Kubernetes pour les applications nécessitant du stockage persistent. (Laisser les réglages par défaut)
+
+   .. figure:: images/karbon5.jpg
+
+#. Pour finir cliquer sur **Create** pour lancer la création du cluster. Cela devrait prendre moins de 10 minutes. Vous pouvez monitorer l'avancement et observer l'apparition de nouvelles VMs sur le cluster Nutanix. 
+
+Notre cluster Kubernetes est en cours de création et sera livré avec : 
+      - le CNI de votre choix configuré
+      - le driver CSI permettant l'accès au stockage bloc et fichier installé 
+      - Une stack de gestion des logs EFK - ElasticSearch Fluentd Kibana permettant la gestion des logs du cluster k8s lui même 
+      - Une gestion du monitoring et des métriques (node exporter, metric server, prometheus)
 
 
+Connexion au cluster Kubernetes 
++++++++++++++++++++++++++
+#. Vérifier que le cluster Karbon ai terminé son installation. 
 
+#. Sélectionner votre cluster Karbon dans la liste et cliquer sur **Download kubeconfig**
 
+#. Ouvrir le fichier **kubeconfig** et copier son contenu. 
 
+#. Se connecter à notre docker VM en ssh. 
 
+#. Créer un fichier dans le répertoire courant ``vi kubeconfig.cfg`` et coller le contenu du kubeconfig file téléchargé. 
+
+#. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
+
+#. Modifier la variable d'environnement pour configurer la commande **kubectl**. 
 
 
 Définition du manifest de l'application 
 +++++++++++++++++++++++++
+
+#. Pour interragir avec le cluster Kubernetes la cli native **kubectl** ainsi que d'autres outils. Ces outils ont été installés automatiquement sur votre machine docker. 
+Retrouver donc votre machine docker et connecter vous en ssh. 
+
+Notre cluster Kubernetes sera livré sans composant réseau tels que des load balancer, ingress controller, etc.
+
+Pour mener à bien le lab, nous aurons à minima besoin d'un load balancer, nous allons donc installer et configurer Metallb grâce à Helm. 
+Pour en savoir plus sur Helm visiter ce site : https://helm.sh/ 
+
+Au préalable, nous aurons besoin de créer un fichier de configuration pour l'attribution des IPs externes à chacuns de vos load balancer Metallb. 
+
+#. Créer un fichier dans le répertoire courant ``vi configmap-metallb.yaml``
+
+#. Copier le contenu ci dessous en **prenant soin de modifier les plages d'adresses IP corresponsant à votre user** (cf la partie Environnement)
+
+      .. code-block:: yaml
+            apiVersion: v1
+            kind: ConfigMap
+            metadata:
+            namespace: metallb-system
+            name: metallb
+            data:
+            config: |
+               address-pools:
+               - name: default
+                  protocol: layer2
+                  addresses:
+                  - XX.XX.XX.XX-XX.XX.XX.XX
+
+#. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
+
+
+
 ---
 ---
 ---
