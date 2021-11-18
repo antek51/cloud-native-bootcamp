@@ -15,20 +15,54 @@ Le déploiement d'un cluster Kubernetes
 Activation du service Nutanix Karbon
 +++++++++++++++++++++++++
 
-#. Naviguer dans le menu "burger" dans **Services** puis **Karbon**. 
-#. Notez le message d'activation puis cliquer sur **"Enable Karbon"**
+Pour des raisons de temps, nous avons déjà activé et mis à jour Karbon. Vous pouvez néanmoins visionner comment s'active le service grâce à l'enregistrement suivant : 
+   .. raw:: html 
+
+      <iframe width="560" height="340"
+      src="https://youtu.be/ahzB27LQSvQ">
+      </iframe>      
+
 
    .. note::
 
-      L'activation du service prend quelques minutes. En tâche de fond, l'outil déploie 2 conteneurs dans la VM Prism Central. 
-      **karbon-ui** prend en charge l'interface graphique, les requêtes API du moteur Karbon. 
-      **karbon-core** est l'orchestrateur du runtime Kubernetes et tout ce qui est en r
+      L'activation du service prend quelques minutes. En tâche de fond, l'outil déploie 2 conteneurs dans la VM Prism Central.      
+        - **karbon-ui** prend en charge l'interface graphique, les requêtes API du moteur Karbon.
+        - **karbon-core** est l'orchestrateur du runtime Kubernetes et tout ce qui est en r
+
+
+Nous allons maintenant créer notre cluster Karbon et générer le fichier de déploiement de l'application pour l'héberger maintenant sur une base technologique de type cloud native. 
+
+#. Dans le menu "burger" sélectionner **Services** puis **Karbon**. 
+
+#. Vérifier que l'image **OS Images** est bien téléchargée. C'est l'image qui sera utiliser pour construire les machines virtuelles qui hébergeront le cluster Kubernetes. 
+
+#. Créer maintenant votre cluster Kubernetes grâce au bouton **Create Kubernetes Cluster** 
+
+#. Etape 1 : Selectionner un cluster de type **Development** pour des raisons simples de ressources disponibles sur la plateforme. 
+
+   .. note::
+
+      Un cluster de type **Development** consomme une minimum de 3 VMs : 1 Master, 1 etcd, 1 Worker.
+
+      Un cluster de type **Production** consomme un minimum de 5 VMs : 2 Master, 3 etcs, 1 Worker. 
+
+
+#. Etape 2 : 
+      - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user##-karbon**
+      - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
+      - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
+      - Renseigner l'image Host OS à utiliser (**Selectionner la version la plus récente**)
 
 
 
 
 
 
+
+
+
+Définition du manifest de l'application 
++++++++++++++++++++++++++
 ---
 ---
 ---
