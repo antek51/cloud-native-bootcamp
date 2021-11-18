@@ -9,28 +9,107 @@ Dans cette 1ère partie, nous allons faire connaissance avec Calm en clonant une
 Cloner une application de la marketplace
 ++++++++++++++++++++++++++++++++++++++++
 
-#. Connectez vous sur PRISM Central avec votre utilisateur **USER** 
-
+#. Connectez vous sur PRISM Central avec votre utilisateur **USER**
 #. Cliquez sur **Services > Calm**
-
 #. Sélectionnez l'icone Marketplace 
     .. image:: images/1.png
-       :alt: icône panier   
+       :alt: icône panier
 
 #. Cliquez sur le bouton **Get** de l'application **Exemple**
-
 #. Cliquez sur **Clone**
-
 #. Renseignez les informations suivantes pour le blueprint :
     - Nom : **<Initiales>_Fiesta**
-    - Projet : **<Vote projet>** 
+    - Projet : **Bootcamp**
 
 Vous voilà avec un blueprint issu de l'application de la marketplace, nous allons pouvoir le modifier pour en faire notre propre application.
+
+Aperçu du de l'interface MultiVM-Blueprint
+++++++++++++++++++++++++++++++++++++++++++
+
+Vous êtes à présent sur l'interface d'édition d'un blueprint en mode Multi-VM. Cliquez sur l'icône **Fiesta**.
+
+- A gauche, on trouve le panneau des services et des profils. Il est souvent plus pratique de l'avoir en mode étendu, en cliquant sur l'icône de gauche qui se trouve en haut à gauche.
+    .. image:: images/2.png
+       :alt: Panneau des services
+
+    - Dans ce panneau on va retrouver les services qui sont utilisés dans l'application. Par exemple ici, MariaDB qui sera une base de donnée, et Fiesta, une application marchange Web
+    - "Update Config" est une entrée particulière permettant de changer les caractéritiques (vCPU, vRAM, catégories, etc.) des VM utilisées par les services
+    - "Application Profiles" correspond à différents types de déploiements qu'on pourrait vouloir faire : Prod, PréProd, On-Prem, Cloud-Azure, Hybride. Par défaut il n'y a qu'un profile par défaut, le développeur des blueprints peut en créer autant qu'il le souhaite.
+- Au centre on trouve la zone d'édition, dans laquelle les services sont représentés par des icones dans des cadres
+    .. image:: images/3.png
+       :alt: Représentation graphique des services
+
+    - Sous l'icône on retrouve le nom du service (le même que celui qu'on retrouvait dans le panneau de gauche)
+    - Au dessus de chaque service, on a le nom du substrat (comprendre VM ou conteneur) qui va l'exécuter. L'icône à gauche du nom permet de savoir quel environnement va faire fonctionner ce substrat. Le X vert et bleu correspond à un cluster Nutanix.
+- A droite nous avons un panneau représentant les détails de l'élément sélectionné dans l'éditeur du blueprint. Il s'agit donc ici des détails du service MariaDB qu'on a sélectionné. Le contenu sera donc différent en fonction du type d'objet sélectionné.
+    .. image:: images/4.png 
+       :alt: Panneau détails
+
+Caractéristiques d'un service
++++++++++++++++++++++++++++++
+
+Lorsqu'un service est sélectionné, le panneau de détail affiche 3 onglets :
+    .. image:: images/5.png
+       :alt: Onglets du service
+
+- L'onglet "VM" permet d'accéder aux détails de la VM, c'est ici qu'on va configurer la totalité des paramètres de cette dernière : vCPU, vRAM, vDisks, vNIC, catégories, etc...
+- L'onglet "Package" permet de configurer les opérations pour installer et désinstaller l'application sur la VM. Par exemple, on va définir ici l'installation des binaires MySQL pour un service MySQL.
+- L'onglet "Service" permet de définir 3 élements 
+    - La description du service
+    - Le nombre d'occurences de la VM qu'il est possible de déployer pour ce service
+    - Les variables propres à ce service
+
+Cliquez sur l'onglet "Package"
+    .. image:: images/6.png
+       :alt: Onglet Package
+
+Sous le nom de package, cliquez sur **Configure install**. Dans la zone d'édition, sous le nom du service, on retrouve une représentation du "Package Install". 
+    .. image:: images/7.png
+       :alt: Install Package graphique
+
+On voit que l'installation du package consiste en la succession de 3 tâches :
+
+- Update OS
+- Install npm
+- Setup Festia app
+
+Ces tâches peuvent être de 4 types : 
+
+- Un script à exécuter sur la VM ou directement depuis Calm
+- Une requête HTTP (pour les API)
+- Une instanciation de variable
+- Une pause
+
+Les 3 tâches présentes ici, pour le pachage install, sont des scripts. En cliquant sur l'une d'elle, on a, dans le panneau de détail, le contenu de ce script.
+
+Cliquez sur "Update OS" pour l'afficher 
+    .. image:: images/8.png
+       :alt: Script details
+
+Il est possible d'afficher en grand le script pour une modification plus aisée en cliquant sur l'icône de gauche, en haut à droite.
+    .. image:: images/9.png
+       :alt: Zoom on script
 
 Modification du blueprint
 +++++++++++++++++++++++++
 
+Nous allons modifier le blueprint que nous venons de copier depuis la Marketplace pour en faire une application fonctionnelle. 
 
+Utilisation d'une variable Calm
+-------------------------------
+
+Calm dispose de variables qui peuvent être gérées manuellement par le développeur du blueprint, ou par Calm lui même. Nous allons en utiliser une dans 
+
+Aller dans create de l'application pour voir
+Modification de la tâche "Start the Fiesta App" dans le package install de Fiesta, et modification de MARIADB_IP par @@{MariaDB.address}@@
+Aller dans create de l'application pour voir la dépendance qui s'est créé
+
+Utilisation d'un crédential
+---------------------------
+
+Créer un credential Mariadb root+password
+Le rendre personnalisable avec le bonhomme bleu
+Modifier package install de MariaDB, tâche "Setup FiestaDB in MariaDB", et changer le mot de passe par le user.secret
 
 
 
