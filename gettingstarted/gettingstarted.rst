@@ -46,42 +46,32 @@ Plage IP pour la configuration du load balancer dans le module 4 :
   * - User ##
     - Plage IP
   * - user01
-    - 10.XX.XX.XX
+    - 10.42.7.196 - 10.42.7.197
   * - user02
-    - 10.XX.XX.XX
+    - 10.42.7.198 - 10.42.7.199
   * - user03
-    - 10.XX.XX.XX
+    - 10.42.7.200 - 10.42.7.201
   * - user04
-    - 10.XX.XX.XX
+    - 10.42.7.202 - 10.42.7.203
   * - user05
-    - 10.XX.XX.XX
+    - 10.42.7.204 - 10.42.7.205
   * - user06
-    - 10.XX.XX.XX
+    - 10.42.7.206 - 10.42.7.207
   * - user07
-    - 10.XX.XX.XX
+    - 10.42.7.208 - 10.42.7.209
   * - user08
-    - 10.XX.XX.XX
+    - 10.42.7.210 - 10.42.7.211
   * - user09
-    - 10.XX.XX.XX
+    - 10.42.7.212 - 10.42.7.213 
   * - user10
-    - 10.XX.XX.XX
+    - 10.42.7.214 - 10.42.7.215
   * - user11
-    - 10.XX.XX.XX
+    - 10.42.7.216 - 10.42.7.217
   * - user12
-    - 10.XX.XX.XX
+    - 10.42.7.218 - 10.42.7.219
  * - user13
-    - 10.XX.XX.XX
+    - 10.42.7.220 - 10.42.7.221
   * - user14
-    - 10.XX.XX.XX
+    - 10.42.7.222 - 10.42.7.223
   * - user15
-    - 10.XX.XX.XX
-  * - user16
-    - 10.XX.XX.XX
-  * - user17
-    - 10.XX.XX.XX
-  * - user18
-    - 10.XX.XX.XX
-  * - user19
-    - 10.XX.XX.XX
-  * - user20 - Réservé pour les instructeurs
-    - 10.XX.XX.XX
+    - 10.42.7.224 - 10.42.7.225
