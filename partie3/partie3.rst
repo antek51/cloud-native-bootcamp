@@ -1,8 +1,8 @@
 .. _phase3_container:
 
-------------------------
+------------------------------------------------
 3. Conteneurisation de l'application
-------------------------
+------------------------------------------------
 
 Les conteneurs sont utilisés comme moyen pour délivrer des packages de logiciels qui incluent le code ainsi que toutes les dépendances dans une image. Cela permet à l'application d'être portable et ainsi d'être utilisé dans plusieurs environnements différents. 
 
@@ -10,7 +10,7 @@ Dans cette section, nous allons **convertir l'application "Fiesta" en conteneur*
 
 
 Analyse de l'application existante 
-+++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++
 
 Pour connaitre l'application, nous allons examiner le Blueprint Calm et ainsi découvrir comment elle est composée, installée et démarée. 
 
@@ -38,7 +38,7 @@ Pour connaitre l'application, nous allons examiner le Blueprint Calm et ainsi d�
    .. figure:: images/calm4.jpg  
 
 Construction du conteneur 
-+++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++
 
 Dans cette section nous allons construire notre **conteneur avec l'application Fiesta et ses dépendances**.
 
@@ -72,6 +72,7 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
 #. Copier et coller le contenu suivant : 
 
    .. code-block:: yaml
+
       # This dockerfile multi step is to start the container faster as the runapp.sh doesn't have to run all npm steps
 
       # Grab the Alpine Linux OS image and name the container base
@@ -124,21 +125,23 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
 
 #. Copier et coller le contenu suivant : 
 
-   .. note:: Remplacer la variable **$DB_SERVER** par l'adresse IP de votre VM user##-MariaDB_VM 
+   .. note:: 
+      Remplacer la variable **$DB_SERVER** par l'adresse IP de votre VM user##-MariaDB_VM 
 
 
    .. code-block:: bash
-         #!/bin/sh
-         # Change the Fiesta configuration code so it works in the container
-         sed -i "s/REPLACE_DB_NAME/FiestaDB/g" /code/Fiesta/config/config.js
-         sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
-         sed -i "s/REPLACE_DB_DIALECT/mysql/g" /code/Fiesta/config/config.js
-         sed -i "s/REPLACE_DB_USER_NAME/fiesta/g" /code/Fiesta/config/config.js
-         sed -i "s/REPLACE_DB_PASSWORD/fiesta/g" /code/Fiesta/config/config.js
 
-         # Run the NPM Application
-         cd /code/Fiesta
-         npm start
+      #!/bin/sh
+      # Change the Fiesta configuration code so it works in the container
+      sed -i "s/REPLACE_DB_NAME/FiestaDB/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_DIALECT/mysql/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_USER_NAME/fiesta/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_PASSWORD/fiesta/g" /code/Fiesta/config/config.js
+
+      # Run the NPM Application
+      cd /code/Fiesta
+      npm start
 
 #. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
@@ -158,3 +161,9 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
 #. Ouvrir un navigateur vers l'adresse ``http://IP-DOCKER-VM:3000``
 
    .. figure:: images/fiesta.jpg  
+
+
+Upload de l'image dans notre registry privée 
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+A COMPLETER

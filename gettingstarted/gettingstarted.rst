@@ -5,7 +5,7 @@ Environnements
 ---------------
 
 Connexion à l'environnement 
-+++++++++++++++++
++++++++++++++++++++++++++++++++++
 
 Pour vous connecter à l'environnement, nous utiliserons le service de **Desktop as a service** : **Nutanix Frame**
 
@@ -36,6 +36,14 @@ Lors de cet atelier nous utiliserons les outils suivants :
 
 Ressources 
 +++++++++++++++++
+
+Adresse Prism Central : 
+  - Compte : ``admin``
+  - Password : ``nx2Tech123!``
+
+Adresse Registry privée : 
+  - Port utilisé : 
+
 
 Plage IP pour la configuration du load balancer dans le module 4 : 
 
