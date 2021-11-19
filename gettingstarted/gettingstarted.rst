@@ -69,7 +69,7 @@ Plage IP pour la configuration du load balancer dans le module 4 :
     - 10.42.7.216 - 10.42.7.217
   * - user12
     - 10.42.7.218 - 10.42.7.219
- * - user13
+  * - user13
     - 10.42.7.220 - 10.42.7.221
   * - user14
     - 10.42.7.222 - 10.42.7.223
