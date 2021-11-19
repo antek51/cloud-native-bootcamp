@@ -1,8 +1,8 @@
 .. _phase4_container:
 
-------------------------
+--------------------------------------------------------
 4. Utilisation du service CaaS Nutanix Karbon
-------------------------
+--------------------------------------------------------
 
 Dans ce module, nous allons utiliser le service **Nutanix Karbon**. 
 Ce service est **natif** dans Prism Central et compatible avec l'hyperviseur Nutanix AHV. 
@@ -13,7 +13,7 @@ Le déploiement d'un cluster Kubernetes
 
 
 Activation du service Nutanix Karbon
-+++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++
 
 Pour des raisons de temps, nous avons déjà activé et mis à jour Karbon. Vous pouvez néanmoins visionner comment s'active le service grâce à l'enregistrement suivant : 
    .. raw:: html 
@@ -83,26 +83,51 @@ Notre cluster Kubernetes est en cours de création et sera livré avec :
       - Une gestion du monitoring et des métriques (node exporter, metric server, prometheus)
 
 
-Connexion au cluster Kubernetes 
-+++++++++++++++++++++++++
+Connexion au cluster Karbon 
++++++++++++++++++++++++++++++++++++++
 #. Vérifier que le cluster Karbon ai terminé son installation. 
 
-#. Sélectionner votre cluster Karbon dans la liste et cliquer sur **Download kubeconfig**
+#. Sélectionner votre cluster Karbon dans la liste et cliquer sur **Download Kubeconfig**
 
 #. Ouvrir le fichier **kubeconfig** et copier son contenu. 
 
 #. Se connecter à notre docker VM en ssh. 
 
-#. Créer un fichier dans le répertoire courant ``vi kubeconfig.cfg`` et coller le contenu du kubeconfig file téléchargé. 
+#. Créer un dossier ``mkdir .kube``
+
+#. Créer un fichier dans le répertoire courant ``vi .kube/config`` et coller le contenu du kubeconfig file téléchargé. 
 
 #. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
-#. Modifier la variable d'environnement pour configurer la commande **kubectl**. 
+#. Configurer la variable d'environnement avec la commande ``export KUBECONFIG=$HOME/.kube/config``
 
+#. Tester l'accès au cluster en tapant la commande ``kubectl cluster-info``. Noter l'IP du cluster et comparer avec l'information dans Prism Central / Karbon. 
 
-Définition du manifest de l'application 
+#. Kubectl -> k 
+
+Utilisation de k9s
 +++++++++++++++++++++++++
 
+k9s est un outil permettant d'interragir simplement et rapidement avec n'importe quel cluster Kubernetes. 
+Il s'agit d'un outil gratuit et développé par Fernand Galiana. Plus d'info ici : https://k9scli.io/
+
+Il est déjà installé sur votre docker vm. 
+
+#. Taper ``k9s`` dans le terminal pour lancer l'application. 
+
+   .. figure:: images/k9s1.jpg
+
+
+#. Tester les raccourcis clavier pour naviguer dans votre cluster kubernetes simplement. 
+      - Utiliser ``:`` et les objets type **pod**, **namespace**, **services**, etc pour naviguer dans les ressources.
+      - Utiliser le pavé numérique pour naviguer entre les namesspace. 
+
+
+Configuration de notre cluster Karbon 
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Installation du load balancer : 
+----------------------------------------
 #. Pour interragir avec le cluster Kubernetes la cli native **kubectl** ainsi que d'autres outils. Ces outils ont été installés automatiquement sur votre machine docker. 
 Retrouver donc votre machine docker et connecter vous en ssh. 
 
@@ -117,216 +142,163 @@ Au préalable, nous aurons besoin de créer un fichier de configuration pour l'a
 
 #. Copier le contenu ci dessous en **prenant soin de modifier les plages d'adresses IP corresponsant à votre user** (cf la partie Environnement)
 
-      .. code-block:: yaml
-            apiVersion: v1
-            kind: ConfigMap
-            metadata:
-            namespace: metallb-system
-            name: metallb
-            data:
-            config: |
-               address-pools:
-               - name: default
-                  protocol: layer2
-                  addresses:
-                  - XX.XX.XX.XX-XX.XX.XX.XX
+   .. code-block:: yaml
+      
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+      namespace: metallb-system
+      name: metallb
+      data:
+      config: |
+         address-pools:
+         - name: default
+            protocol: layer2
+            addresses:
+            - XX.XX.XX.XX-XX.XX.XX.XX
 
 #. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
+#. Les commandes suivantes vont permettre d'installer un load balancer **Metallb** automatiquement grâce à **Helm**.
+
+   .. code-block:: bash
+
+      helm repo add metallb https://metallb.github.io/metallb
+      
+      helm repo update
+      
+      helm install metallb metallb/metallb --set existingConfigMap=metallb
+      
+      k apply -f configmap-metallb.yaml
+
+Configuration de notre registry privée : 
+----------------------------------------
+
+Notre cluster Karbon doit pouvoir accéder à notre bibliothèque d'image interne à l'entreprise. L'usage de registry public peut engendrer des problèmes de sécurité, c'est pourquoi nous allons déclarer notre registry à Karbon. 
+
+#. Se connecter en SSH au Prism Central ``ssh nutanix@IP-PRISM-CENTRAL`` avec le mot de passe ``nutanix/4u``. 
+
+#. La commande suivante permet de se logger sur la CLI de Karbon (Karbonctl) : ``./karbon/karbonctl login --pc-username admin --pc-password nx2Tech123! cc``
+
+#. Ajouter la registry dans le service Karbon : ``./karbon/karbonctl registry add --name registry --url IP-REGISTRY --port 5000``
+
+#. Vérifier que la registry a bien été ajoutée : ``./karbon/karbonctl registry list``
+
+#. Ajouter la resgistry à votre cluster Karbon : ``./karbon/karbonctl cluster registry add --cluster-name NOM-CLUSTER-KARBON --registry-name registry``
 
 
----
----
----
----
 
+Test avec une application simple 
++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Nous allons vérifier le bon fonctionnement de notre load balancer en déployant une simple application. Elle devrait normalement récupérer une adresse IP et être joignable depuis l'extérieur. 
 
-While the CI/CD pipeline is now capable of automating the build, test, upload to your Docker Hub registry, and deployment steps, you may have noticed it still takes multiple minutes for the **Fiesta_App** to be ready for use. In environments where you could see thousands of code pushes per day, *minutes matter!*
-
-As you add additional containerized services to the pipeline, where operations are executed begin to have a significant impact on optimizing the build and deployment times of your application.
-
-Currently, the container clones and builds the application source code *after* the container starts. We can shift these operations into the container image build process to decrease the time required for the running container to become ready.
-
-In this exercise you will:
-
-   - Update the **dockerfile** to include the Fiesta installation commands
-   - Update **runapp.sh** to remove the Fiesta installation commands
-   - Update **.drone.yml** to remove irrelevant image test commands
-   - Test your updated build
-
-Updating Fiesta_App Files
-+++++++++++++++++++++++++
-
-#. Return to your **Visual Studio Code (Local)** window and open **dockerfile**.
-
-#. Overwrite **ALL** of the contents of the file with the following:
+#. Créer un fichier ``vi whoami.yaml``et coller le contenu YAML ci dessous : 
 
    .. code-block:: yaml
 
-      # This dockerfile multi step is to start the container faster as the runapp.sh doesn't have to run all npm steps
+      apiVersion: v1
+      kind: Pod
+      metadata:
+      name: whoami
+      namespace: app
+      labels:
+         app: whoami
+      spec:
+      containers:
+         - name: whoami
+            image: containous/whoami:latest
+            ports:
+            - containerPort: 80
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+      name: whoami
+      namespace: app
+      spec:
+      ports:
+         - port: 80
+            protocol: TCP
+            targetPort: 80
+      selector:
+         app: whoami
+      type: LoadBalancer
 
-      # Grab the Alpine Linux OS image and name the container base
-      FROM ntnxgteworkshops/alpine:latest as base
+#. Lancer le déploiement de l'application ``kubectl create ns whoami | kubectl apply -f whoami.yaml -n whoami``
 
-      # Install needed packages
-      RUN apk add --no-cache --update nodejs npm git
+#. Vérifier la création du pod et du service dans k9s. Le service doit obtenir une IP externe du load balancer. 
 
-      # Create and set the working directory
-      RUN mkdir /code
-      WORKDIR /code
+   .. figure:: images/k9s2.jpg
 
-      # Get the Fiesta Application in the container
-      RUN git clone https://github.com/sharonpamela/Fiesta.git /code/Fiesta
+   .. figure:: images/k9s3.jpg
 
-      # Get ready to install and build the application
-      RUN cd /code/Fiesta && npm install
-      RUN cd /code/Fiesta/client && npm install
-      RUN cd /code/Fiesta/client && npm audit fix
-      RUN cd /code/Fiesta/client && npm fund
-      RUN cd /code/Fiesta/client && npm update
-      RUN cd /code/Fiesta/client && npm run build
+#. Dans votre navigateur, se connecter sur l'ip de l'application **http://@IP-APPLICATION**
 
-      # Grab the Alpine Linux OS image and name it Final_Image
-      FROM ntnxgteworkshops/alpine:latest as Final_Image
+   .. figure:: images/app1.jpg
 
-      # Install some needed packages
-      RUN apk add --no-cache --update nodejs npm mysql-client
 
-      # Get the NMP nodemon and install it
-      RUN npm install -g nodemon
+Rédaction de notre fichier de déploiement de la nouvelle application Fiesta  
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-      # Copy the earlier created application from the first step into the new container
-      COPY --from=base /code /code
+Nous allons reprendre nos travaux de conteneurisation de l'application Fiesta :-) 
 
-      # Copy the starting app
-      COPY runapp.sh /code
-      RUN chmod +x /code/runapp.sh
-      WORKDIR /code
+A la fin de la 3ième partie, nous avions une image Docker contenant l'application. L'objectif maintenant est de la déployer sur notre cluster Kubernetes et ainsi pouvoir bénéficier de ces avantages (scalabilité, résilience, cycle de développement, etc ...). 
 
-      # Start the application
-      ENTRYPOINT [ "/code/runapp.sh"]
-      EXPOSE 3001 3000
+Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons exécuter l'application. Cela se réalise au travers de fichiers de description YAML. 
 
-#. Save the file.
+#. Créer le fichier ``vi fiesta-app-v2.yaml``
 
-   .. note::
+#. Coller le contenu suivant **en prenant soin de modifier l'adresse IP et le port de la registry ainsi que le nom de votre image de l'application Fiesta**. Il contient la configuration du déploiement de l'application ainsi que le service qui publie l'application à l'extérieur du cluster. 
 
-      We will **NOT** push the changes until all files have been updated.
+   .. code-block:: yaml
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+      name: fiesta-app
+      labels:
+         app: fiesta-front
+      spec:
+      replicas: 1
+      selector:
+         matchLabels:
+            app: fiesta-front
+      template:
+         metadata:
+            labels:
+            app: fiesta-front
+         spec:
+            containers:
+            - name: fiesta-app
+               image: IP-REGISTRY:PORT/NOM-IMAGE:latest
+               ports:
+                  - containerPort: 3000
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+      name: fiesta-app-service
+      spec:
+      type: LoadBalancer
+      selector:
+         app: fiesta-front
+      ports:
+         - name: http
+            protocol: TCP
+            port: 3000
+            targetPort: 3000
+      ---
 
-   Now we see that the Fiesta application source code will be cloned and built on the Docker VM and *then* copied into the container on the ``COPY --from=base /code /code`` line.
+#. Suivez le déploiement de l'application dans k9s et notez l'adresse du service **fiesta-app-service**
 
-   Not only will this decrease the start time of the application, it will also decrease the total size. This is because many additional *temporary* packages are downloaded by **npm** as part of the build process which are not automatically removed after the build has completed.
+   .. figure:: images/k9s4.jpg
 
-#. Open **runapp.sh** and overwrite **ALL** of the contents of the file with the following:
+#. Dans votre navigateur, se connecter sur l'ip de l'application **http://@IP-APPLICATION**
 
-   .. code-block:: bash
+   .. figure:: images/fiesta.jpg
 
-      #!/bin/sh
 
-      # If there is a "/" in the password or username we need to change it otherwise sed goes haywire
-      if [ `echo $DB_PASSWD | grep "/" | wc -l` -gt 0 ]
-          then
-              DB_PASSWD1=$(echo "${DB_PASSWD//\//\\/}")
-          else
-              DB_PASSWD1=$DB_PASSWD
-      fi
 
-      if [ `echo $DB_USER | grep "/" | wc -l` -gt 0 ]
-          then
-              DB_USER1=$(echo "${DB_USER//\//\\/}")
-          else
-              DB_USER1=$DB_USER
-      fi
+Félicitations ! Votre application "legacy" est maintenant hébergée sur des technologies modernes sur une seule et même plateforme. 
 
-      # Change the Fiesta configuration code so it works in the container
-      sed -i "s/REPLACE_DB_NAME/$DB_NAME/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_DIALECT/$DB_TYPE/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_USER_NAME/$DB_USER1/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_PASSWORD/$DB_PASSWD1/g" /code/Fiesta/config/config.js
-
-      # Run the NPM Application
-      cd /code/Fiesta
-      npm start
-
-#. Save the file.
-
-   The only thing the start-up script for our container is now responsible for is updating the **config.js** file with the environment variables and starting the application.
-
-#. Open **.drone.yml**.
-
-#. Under **steps > name: Test local built container > commands**, remove the line ``- git clone https://github.com/sharonpamela/Fiesta /code/Fiesta``.
-
-   .. figure:: images/5.png
-
-   This test is no longer needed as the source code as is now being cloned from GitHub outside of the container image.
-
-#. Save the file.
-
-Testing The Optimizations
-+++++++++++++++++++++++++
-
-#. Commit and push your 3 updated files to your **Gitea** repo.
-
-#. In **Drone > nutanix/Fiesta_Application > ACTIVITY FEED**, note the the **build test image** stage now takes significantly longer as this is where we have shifted a majority of the operations.
-
-   .. figure:: images/1.png
-
-   This is a reasonable trade-off as for every build in an environment, you will likely have multiple deployments (development environments, user acceptance testing, production, etc.).
-
-#. After the **Deploy newest image** stage is complete, return to your **Visual Studio Code (Docker VM SSH)** window and open the **Terminal**.
-
-   .. note:: Alternatively, you can SSH to your Docker VM using PuTTY or Terminal.
-
-#. Run ``docker image ls`` to list the images.
-
-   .. figure:: images/3.png
-
-   In the example above, the size of the image decreased by nearly 100MB. Again this is due to eliminating all of the additional temporary packages downloaded by **npm** when performing the application build inside of the container.
-
-   Next we'll test how quickly the new image is able to start the Fiesta app.
-
-#. Run ``docker stop Fiesta_App`` to stop and remove your container.
-
-#. You can run ``docker ps --all`` to validate **Fiesta_App** container is no longer present.
-
-   You should expect to see only your **drone**, **drone-runner-docker**, **gitea**, and **mysql** containers.
-
-#. Copy and paste the script below into a temporary text file and update the **DB_SERVER** and **USERNAME** variables to match your environment and **Docker Hub** account.
-
-   .. code-block:: bash
-
-      DB_SERVER=<IP ADDRESS OF MARIADB VM>
-      DB_NAME=FiestaDB
-      DB_USER=fiesta
-      DB_PASSWD=fiesta
-      DB_TYPE=mysql
-      USERNAME=<DOCKERHUB USERNAME>
-      docker run --name Fiesta_App --rm -p 5000:3000 -d -e DB_SERVER=$DB_SERVER -e DB_USER=$DB_USER -e DB_TYPE=$DB_TYPE -e DB_PASSWD=$DB_PASSWD -e DB_NAME=$DB_NAME $USERNAME/fiesta_app:latest && docker logs --follow Fiesta_App
-
-#. Paste the updated script into your SSH terminal session and press **Return** to execute the final command.
-
-   The app should start in ~15 seconds, as indicated by ``You can now view client in the browser`` output from your terminal session. *That's significantly faster than the 3+ minutes it took previously!*
-
-#. Optionally, if you want to compare the start time of your previous build:
-
-   - Press **CTRL+C** to stop the ``docker log`` command
-   - Run ``docker stop Fiesta_App``
-   - Run ``docker image ls`` and note the **TAG** of one of your previous versions of the image, as indicated by its larger file size
-
-      .. figure:: images/6.png
-
-   - In the following command, replace **LATEST** with the **TAG** value from the previous step run ``docker run --name Fiesta_App --rm -p 5000:3000 -d -e DB_SERVER=$DB_SERVER -e DB_USER=$DB_USER -e DB_TYPE=$DB_TYPE -e DB_PASSWD=$DB_PASSWD -e DB_NAME=$DB_NAME $USERNAME/fiesta_app:LATEST && docker logs --follow Fiesta_App``
-
-   - Run the command
-
-   This version should take *much* longer than the optimized container image.
-
-.. raw:: html
-
-    <H1><font color="#B0D235"><center>Congratulations!</center></font></H1>
-
-You've addressed the final issue in our CI/CD pipeline by optimizing the time it takes to deploy the application from the Docker container. :fa:`thumbs-up` What now?
-
-Up to this point in the lab, every build has been dependent on the pre-deployed "production" version of our MariaDB database. In the next exercise, we'll take advantage of **Nutanix Era** to provide database cloning as part of the pipeline.
+   .. figure:: images/yes.gif
