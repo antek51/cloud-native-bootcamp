@@ -111,6 +111,9 @@ Utilisation d'une variable Calm
 
 Calm dispose de variables qui peuvent être gérées manuellement par le développeur du blueprint, ou par Calm lui même. 
 
+.. note::
+   On ne parle normalement pas de "variables" sous Calm, mais de "macros", il s'agit juste d'une terminologie différente pour un même concept. Nous avons gardé volontairement le terme "Variable" dans ce lab car il est plus commun et permet une meilleure compréhension.
+
 L'objectif est de faire en sorte que la configuration du webserver Fiesta soit faite automatiquement lors du déploiement de l'application complète. Il faut par exemple, renseigner l'IP de la base de données MariaDB dans les fichiers de configuration. 
 C'est ce que nous allons faire.
 
