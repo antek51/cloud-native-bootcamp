@@ -252,6 +252,7 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
 #. Coller le contenu suivant **en prenant soin de modifier l'adresse IP et le port de la registry ainsi que le nom de votre image de l'application Fiesta**. Il contient la configuration du déploiement de l'application ainsi que le service qui publie l'application à l'extérieur du cluster. 
 
    .. code-block:: yaml
+      
       apiVersion: apps/v1
       kind: Deployment
       metadata:

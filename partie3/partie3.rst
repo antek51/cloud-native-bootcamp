@@ -154,6 +154,8 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
 
 #. La commande ``docker image ls`` indique que l'image a bien été créée. 
 
+Dans les organisations, l'utilisation d'une registry privée est conseillée pour des raisons de sécurité et de contrôle. 
+
 #. Nous allons maintenant pousser l'application dans la registry pour permettre de l'utiliser depuis notre cluster Karbon avec la commande ``docker push IP-REGISTRY:5000/user##-fiesta-app:1.0``
 
 #. Avant de passer à l'étape suivante, il est utile de tester le conteneur grâce à la commande ``docker run -d --rm -p 5000:3000 IP-REGISTRY:5000/user##-fiesta-app:1.0``
@@ -163,7 +165,7 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
    .. figure:: images/fiesta.jpg  
 
 
-Upload de l'image dans notre registry privée 
-+++++++++++++++++++++++++++++++++++++++++++++++++
 
-A COMPLETER
+
+
+
