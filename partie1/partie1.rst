@@ -228,8 +228,10 @@ Il nous reste à utiliser ce credential dans nos scipts de notre blueprint :
 #. Agrandissez la fenêtre du script pour travailler de manière plus agréable
 #. Ligne 4, vous pouvez constater que le mot de passe 'Nutanix/4u' est en clair et en dur dans le script
 #. Remplacez ce mot de passe par la variable correspondant au mot de passe du credential : ``@@{AdminDB.secret}@@`` (en conservant les quotes qui l'entoure)
+#. Fermez la page d'édition du script
 #. Sauvegardez le blueprint
-#. Notre modification est terminé...
+
+Notre modification est terminé
 
 Test du déploiement du blueprint
 ++++++++++++++++++++++++++++++++
@@ -238,19 +240,19 @@ Avant de mettre ce blueprint dans la MarketPlace, il est préférable de le test
 
 Exécutons ce blueprint.
 
-#. Il faut pour cela cliquer sur le bouton suivant :
+#. Il faut pour cela cliquer sur le bouton suivant en haut à droite :
     .. image:: images/19.png
        :alt: Launch
        :width: 100px
 
-#. La fromulaire de lancement va s'affichier (vérifiez que vous êtes bien en mode ``Consumer`` en haut à droite)
+#. La formulaire de lancement va s'affichier (vérifiez que vous êtes bien en mode ``Consumer`` en haut à droite)
 
 #. Renseignez les données suivantes :
     - ``Application name`` : **|Vos initiales]-Fiesta-Test**
     - ``Àpplication description`` : Ce que vous souhaitez
-    - ``Environmant`` : Laissez **All Projct Accouts**
+    - ``Environmant`` : Laissez **All Project Accounts**
     - ``App Profile`` : Laissez **Default**
-    - ``Initials`` : Vos initiales
+    - ``Initiales`` : Vos initiales
     - ``AdminDB > Password`` : Le mot de passe de votre choix
   
     .. image:: images/20.png
@@ -270,15 +272,18 @@ Exécutons ce blueprint.
     .. image:: images/22.png
        :alt: Application
        :width: 600px
-#. En cliquant sur l'onglet ``Manage``, puis sur l'oeil à coté de ``Create``, vous allez pouvoir suivre le déploiement de l'application étapes par étapes. Un rond bleur signifie que l'opération est en cours, un rond vert qu'elle est terminée avec succès, et rouge signifie qu'un problème est survenu à cette étape.
-    .. image:: images/23.png
-       :alt: Launch
-       :width: 600px
+#. En cliquant sur l'onglet ``Manage``, vous allez pouvoir suivre le déploiement de l'application étapes par étapes (il faudra éventuellement cliquer sur l'oeil). 
+    - Un rond bleu signifie que l'opération est en cours
+    - un rond vert qu'elle est terminée avec succès
+    - un rond rouge signifie qu'un problème est survenu à cette étape.
+       .. image:: images/23.png
+          :alt: Launch
+          :width: 600px
 #. Dans la zone de droite, vous avez la possibilité de cliquer sur chacune des étapes pour voir le détail des opérations, et les logs des scripts qui ont été exécutés par Calm.
     .. image:: images/24.png
        :alt: Launch
        :width: 350px
-#. A la fin du déploiement, l'application est notée ``running`` et toutes les tâches sont vertes
+#. A la fin du déploiement (env 10mn, le moment de faire une pause café), l'application est notée ``running`` et toutes les tâches sont vertes
     .. image:: images/25.png
        :alt: Launch
        :width: 600px
@@ -294,7 +299,7 @@ Exécutons ce blueprint.
        :alt: Fiesta
        :width: 600px
 #. Le blueprint est validé, on peut supprimer l'application en retournant sur Calm, dans l'onglet ``Manage``
-#. Sélectionnez ``Delete`` et cliquez sur la flêche à droite (Play)
+#. Sélectionnez ``Delete`` et cliquez sur la flêche à droite (Play), et confirmez.
     .. image:: images/28.png
        :alt: Delete
        :width: 200px
@@ -380,15 +385,15 @@ Nous allons maintenant déployer notre application.
     - ``Application description`` : Ce que vous souhaitez
     - ``Environmant`` : Laissez **All Projct Accouts**
     - ``App Profile`` : Laissez **Default**
-    - ``Initials`` : Vos initiales
+    - ``Initiales`` : Vos initiales
     - ``AdminDB > Password`` : Le mot de passe de votre choix
 #. Lancez le déploiement de l'application avec 
     .. image:: images/37.png
        :alt: Deploy
        :width: 100px
-#. L'application va se déployer, et vous pouvez superviser son déploiement comme nous l'avons fait lors du lancement depuis l'éditeur.
+#. L'application va se déployer, et vous pouvez superviser son déploiement comme nous l'avons fait lors du lancement depuis l'éditeur. Il n'est pas nécessaire d'attendre la fin pour continuer notre lab puisque nous avons testé le blueprint juste avant et que tout devrait bien se passer. 
 
-Félicitation, vous venez de déployer votre première application Calm sur la Marketplace. 
+Félicitations, vous venez de publier et de déployer votre première application Calm sur la Marketplace. 
     .. image:: images/congrats.gif
        :alt: Bravo
        :width: 500px
