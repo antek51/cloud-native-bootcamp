@@ -9,8 +9,8 @@ Dans cette 1ère partie, nous allons faire connaissance avec Calm en clonant une
 Cloner une application de la marketplace
 ++++++++++++++++++++++++++++++++++++++++
 
-#. Connectez vous sur PRISM Central avec votre utilisateur **USER**
-#. Cliquez sur **Services > Calm**
+#. Connectez vous sur PRISM Central avec l'utilisateur **admin** et le mot de passe **nx2Tech123!**
+#. Cliquez sur les 3 traits en haut à gauche de la page, puis ``Services > Calm``
 #. Sélectionnez l'icone Marketplace 
     .. image:: images/1.png
        :alt: icône panier
@@ -21,30 +21,34 @@ Cloner une application de la marketplace
 #. Renseignez les informations suivantes pour le blueprint :
     - Nom : **<Initiales>_Fiesta**
     - Projet : **Bootcamp**
+#. Clonez l'application avec le bouton ``Clone``
 
 Vous voilà avec un blueprint issu de l'application de la marketplace, nous allons pouvoir le modifier pour en faire notre propre application.
 
-Aperçu du de l'interface MultiVM-Blueprint
-++++++++++++++++++++++++++++++++++++++++++
+Aperçu de l'interface MultiVM-Blueprint
++++++++++++++++++++++++++++++++++++++++
 
-Vous êtes à présent sur l'interface d'édition d'un blueprint en mode Multi-VM. Cliquez sur l'icône **Fiesta**.
+Vous êtes à présent sur l'interface d'édition d'un blueprint Multi-VM. Un blueprint est une "recette de cuisine" pour définir une application, de son déploiement, à sa suppression, en passant par toutes les actions que vous pourriez vouloir gérer pendant sa vie en production.
 
-- A gauche, on trouve le panneau des services et des profils. Il est souvent plus pratique de l'avoir en mode étendu, en cliquant sur l'icône de gauche qui se trouve en haut à gauche.
-    .. image:: images/2.png
-       :alt: Panneau des services
-       :width: 250px
+Cliquez sur l'icône **Fiesta**.
 
-    - Dans ce panneau on va retrouver les ``services`` qui sont utilisés dans l'application. Par exemple ici, MariaDB qui sera une base de donnée, et Fiesta, une application marchange Web
+- A gauche, on trouve le panneau des services et des profils. 
+    - Note : Il est souvent plus pratique de l'avoir en mode étendu, en cliquant sur l'icône de gauche qui se trouve en haut à droite du panneau.
+       .. image:: images/2.png
+          :alt: Panneau des services
+          :width: 250px
+
+    - Dans ce panneau on va retrouver les ``services`` qui sont utilisés dans l'application. Par exemple ici, MariaDB qui sera une base de donnée, et Fiesta, une application marchande Web
     - ``Update Config`` est une entrée particulière permettant de changer les caractéritiques (vCPU, vRAM, catégories, etc.) des VM utilisées par les services
-    - ``Application Profiles`` correspond à différents types de déploiements qu'on pourrait vouloir faire : Prod, PréProd, On-Prem, Cloud-Azure, Hybride. Par défaut il n'y a qu'un profile par défaut, le développeur des blueprints peut en créer autant qu'il le souhaite.
-- Au centre on trouve la zone d'édition, dans laquelle les services sont représentés par des icones dans des cadres
+    - ``Application Profile`` correspond à différents types de déploiements qu'on pourrait vouloir faire : Prod, PréProd, On-Prem, Cloud-Azure, Hybride. Par défaut il n'y a qu'un profil par défaut, le développeur des blueprints peut en créer autant qu'il le souhaite.
+- Au centre on trouve la zone d'édition, dans laquelle les services sont représentés par des icones dans des "boîtes"
     .. image:: images/3.png
        :alt: Représentation graphique des services
        :width: 400px
 
     - Sous l'icône on retrouve le nom du service (le même que celui qu'on retrouvait dans le panneau de gauche)
     - Au dessus de chaque service, on a le nom du substrat (comprendre VM ou conteneur) qui va l'exécuter. L'icône à gauche du nom permet de savoir quel environnement va faire fonctionner ce substrat. Le X vert et bleu correspond à un cluster Nutanix.
-- A droite nous avons un panneau représentant les détails de l'élément sélectionné dans l'éditeur du blueprint. Il s'agit donc ici des détails du service MariaDB qu'on a sélectionné. Le contenu sera donc différent en fonction du type d'objet sélectionné.
+- A droite nous avons un panneau représentant les détails de l'élément sélectionné dans l'éditeur du blueprint. Ci-dessous, on a les détails du service Fiesta. Le contenu est logiquement différent en fonction du type d'objet sélectionné.
     .. image:: images/4.png 
        :alt: Panneau détails
        :width: 250px
@@ -52,13 +56,13 @@ Vous êtes à présent sur l'interface d'édition d'un blueprint en mode Multi-V
 Caractéristiques d'un service
 +++++++++++++++++++++++++++++
 
-Lorsqu'un service est sélectionné, le panneau de détail affiche 3 onglets :
+Lorsqu'un service est sélectionné, le panneau des détails affiche 3 onglets :
     .. image:: images/5.png
        :alt: Onglets du service
        :width: 250px
 
 - L'onglet ``VM`` permet d'accéder aux détails de la VM, c'est ici qu'on va configurer la totalité des paramètres de cette dernière : vCPU, vRAM, vDisks, vNIC, catégories, etc...
-- L'onglet ``Package`` permet de configurer les opérations pour installer et désinstaller l'application sur la VM. Par exemple, on va définir ici l'installation des binaires MySQL pour un service MySQL.
+- L'onglet ``Package`` permet de configurer les opérations ayant pour objectif d'installer et désinstaller l'application sur la VM. Par exemple, on va définir ici l'installation des binaires MySQL pour un service MySQL.
 - L'onglet ``Service`` permet de définir 3 élements 
     - La description du service
     - Le nombre d'occurences de la VM qu'il est possible de déployer pour ce service
@@ -69,12 +73,12 @@ Cliquez sur l'onglet ``Package``
        :alt: Onglet Package
        :width: 400px
 
-Sous le nom de package, cliquez sur ``Configure install``. Dans la zone d'édition, sous le nom du service, on retrouve une représentation du ``Package Install``. 
+Sous le nom de package, cliquez sur ``Configure install``. Dans la zone d'édition, sous le nom du service, on retrouve une représentation des opérations qui seront réalisées lors du ``Package Install``. 
     .. image:: images/7.png
        :alt: Install Package graphique
        :width: 250px
 
-On voit que l'installation du package consiste en la succession de 3 blocs. Ces blocs sont des tâches ou des appels à des actions :
+On voit que l'installation du package consiste en la succession de 3 blocs. Ces blocs sont des tâches ou des appels à des actions. On y trouve :
 
 - Update OS
 - Install npm
@@ -82,14 +86,14 @@ On voit que l'installation du package consiste en la succession de 3 blocs. Ces 
 
 Une tâche peut être de 4 types : 
 
-- Un script à exécuter sur la VM ou directement depuis Calm
+- Un script à exécuter (sur la VM ou depuis Calm)
 - Une requête HTTP (pour les API)
 - Une instanciation de variable
 - Une pause
 
-Une appel à une action permet d'exécuter une action qui a été définie dans un des services, et qu'on souhaite appeler, un peu comme on le fait avec une fonction dans un langage de programmation. Ces actions peuvent être automatiquement créées par Calm (Start, Stop, Restart, Create, Delete et Soft Delete) ou créées par le développeur, à sa convenance.
+Une appel à une action permet, lui, d'exécuter une action qui a été définie dans un des services, et qu'on souhaite appeler, un peu comme on le fait avec une fonction dans un langage de programmation. Ces actions peuvent être automatiquement créées par Calm (Start, Stop, Restart, Create, Delete et Soft Delete) ou créées par le développeur, à sa convenance.
 
-Les 3 blocs présents ici, pour le package install, sont des tâches exécutant des scripts. En cliquant sur l'un d'eux, on a, dans le panneau de détail, le contenu de ce script.
+Les 3 blocs présents ici, pour le package install, sont des tâches exécutant des scripts. En cliquant sur l'un d'eux, on a, dans le panneau des détails, le contenu de ce script.
 
 Cliquez sur ``Update OS`` pour l'afficher 
     .. image:: images/8.png
@@ -117,12 +121,14 @@ Calm dispose de variables qui peuvent être gérées manuellement par le dévelo
 L'objectif est de faire en sorte que la configuration du webserver Fiesta soit faite automatiquement lors du déploiement de l'application complète. Il faut par exemple, renseigner l'IP de la base de données MariaDB dans les fichiers de configuration. 
 C'est ce que nous allons faire.
 
-Avant de réaliser cette opération, allons afficher les opérations réalisées lors de la création de l'application. Cliquez sur la ligne ``Create`` du profil ``Default`` dans le panneau gauche
+Avant de réaliser cette opération, allons afficher le workflow des opérations réalisées lors de la création de l'application.
+
+Cliquez sur la ligne ``Create`` du profil ``Default`` dans le panneau gauche
     .. image:: images/10.png
        :alt: Create
        :width: 250px 
 
-Dans la zone d'édiction au centre, vous devez voir ceci : 
+Dans la zone d'édition au centre, vous devez voir ceci : 
     .. image:: images/11.png
        :alt: Create representation
        :width: 600px 
@@ -132,8 +138,9 @@ On y voit le workflow que va suivre Calm pour déployer l'application. Actuellem
 ``Create Deployment`` > ``Substrate Create`` > ``Package Install`` > ``[Service] Create`` > ``[Service] Start``
 
 Retournons maintenant dans le package install du webserver Fiesta. Pour cela : 
+
 - Cliquez sur le service ``Fiesta`` au centre de la page
-- Dans le panneau détails de droite, cliquez sur ``Päckage``
+- Dans le panneau détails de droite, cliquez sur ``Package``
 - Enfin, cliquez sur ``Configure Install``
 
 Vous devez avoir cette vue :
@@ -145,19 +152,20 @@ Nous allons maintenant modifier le script de la tâche ``Setup Fiesta App``
     - Cliquez sur cette tâche dans la zone centrale de Calm
     - A droite, étendez le script pour avoir une zone d'édition plus confortable
     - Dans le script, ligne 6, vous avez : ``sudo sed -i "s/REPLACE_DB_HOST_ADDRESS/MARIADB_IP/g" /code/Fiesta/config/config.js``
-    - Nous allons remplacer ``MADIADB_IP`` par la variable correspondant à l'IP de la VM du service MariaBD. 2 varaibles correspondent à cette IP :
+    - Nous allons remplacer ``MADIADB_IP`` par la variable correspondant à l'IP de la VM du service MariaBD. 2 variables correspondent à cette IP :
        - MariaDB.address pour l'adresse du service
        - MariaDB_VM.address pour l'adresse de la VM
-    - Renseignez cette variable à la place de ``MARIADB_IP`` dans le script. Pour rappel, une variable Calm est encadrée de ``@@{`` et ``}@@``.
+    - Renseignez une de ces variables à la place de ``MARIADB_IP`` dans le script. Pour information, une variable Calm est encadrée de ``@@{`` et ``}@@`` pour qu'elle puisse être interprétée.
+    - Fermez la zone de script en cliquant sur le ``X`` en haut à droite.
     - Sauvegardez le blueprint avec le bouton en haut à droite de la page
        .. image:: images/13.png
           :alt: Save
           :width: 100px
 
     .. warning::
-       Les variables citées si dessus ne sont pas intialisées au même moment dans l'exécution du blueprint :
+       Les variables citées si dessus ne sont pas intialisées au même moment lors de l'exécution du blueprint :
           - ``[Service].address`` est valorisée après le démarrage du service
-          - ``[substrat].address`` est valoridée après la création du substrat, et avant l'installation du package
+          - ``[Substrat].address`` est valorisée après la création du substrat, et avant l'installation du package
 
        Cela peut avoir un impact dans votre développement de blueprint.
     
@@ -167,18 +175,21 @@ Nous allons maintenant modifier le script de la tâche ``Setup Fiesta App``
              :alt: completion
              :width: 300px
 
-Nous avons positionné la variable, retournons sur l'action ``Create`` dans le profil. Vous devriez avoir cette vue :
+Nous avons positionné la variable, si vous retournez sur l'action ``Create`` dans le profil. Vous devriez maintenant avoir cette vue :
     .. image:: images/15.png
        :alt: create avec dépendance
        :width: 600px
 
-Comme vous poouvez le voir, un lien orange a été ajouté suite à l'utilisation de la variable (flêche rouge). Calm a constaté que vous utilisiez une variable qui allait être instanciée après la création du substrat (ou après le démarrage du service en fonction de la variable utilisée), et logiquement, il a inséré automatiquement une dépendance entre cet instant où la variable sera instanciée, et la tâche où cette variable est utilisée. 
+Comme vous poouvez le voir, un lien orange (flêche rouge) a été ajouté suite à l'utilisation de la variable . Calm a constaté que vous utilisiez une variable qui allait être instanciée après la création du substrat (ou après le démarrage du service en fonction de la variable utilisée), et a logiquement automatiquement inséré une dépendance entre l'instant où la variable sera instanciée, et la tâche où cette variable est utilisée. 
 
 
 Ajout d'un crédential
 ---------------------
 
-Dans le package install du service MariaDB, le mot de passe root du moteur de base de donnée est mentionné en dur dans le script, ce qui n'est pas du tout une bonne pratique, et qui va aussi causer son affichage dans les logs de déploiement de l'application sous Calm. 
+Dans le package install du service MariaDB, le mot de passe root du moteur de base de données est mentionné en dur dans le script, ce qui : 
+
+- n'est pas du tout une bonne pratique, et 
+- va causer son affichage dans les logs de déploiement de l'application sous Calm. 
 
 Nous allons changer celà en ajoutant un credential dans le blueprint, et en permettant à l'utilisateur déployant l'application de personnaliser son mot de passe.
 
@@ -200,11 +211,10 @@ Nous allons changer celà en ajoutant un credential dans le blueprint, et en per
     - ``Password`` : Mettez le mot de passe de votre choix
 
 #. Cliquez ensuite sur le petit bonhomme sur la ligne ``Password`` pour qu'il devienne bleu. Cela signifie qu'on va laisser l'utilisateur modifier le mot de passe pour mettre celui de son choix quand il déploiera l'application.
-
-Vous devriez avoir ceci : 
-    .. image:: images/18.png
-       :alt: Plus
-       :width: 250px
+    Vous devriez avoir ceci : 
+       .. image:: images/18.png
+          :alt: Plus
+          :width: 250px
 
 #. Sauvegardez avec le bouton ``Save`` en haut à droite
 #. Sortez de la page ``Credentials`` en cliquand sur ``Back`` à droite du bouton ``Save``
