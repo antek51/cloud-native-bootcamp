@@ -6,14 +6,18 @@
 
 Pour la conteneurisation d'une application, nous allons avoir besoin d'une machine avec Docker installé, ainsi que quelques outils pratiques pour interagir avec Karbon/Kubernetes.
 
-En général, ce type de machine est atribuée à un développeur, et il faut donc en déployer plusieurs en fonction du nombre de développeurs. De plus, il arrive qu'une fausse manipulation cause un problème sur cette machine, et il est donc nécessaire d'en redéployer régulièrement.
+C'est typiquement un type de machine qu'on va redéployer régulièrement, pour les raisons suivantes :
+- En général on a une machine mise à disposition par développeur, il faudra donc en déployer plusieurs, et lors de chaque mouvement de personnel devant développer.
+- Il arrive qu'une fausse manipulation cause un problème sur ce serveur, et qu'il soit donc nécessaire d'en redéployer une "neuve".
 
-C'est typiquement un use-case adequat pour une solution d'automatisation telle que Calm. Nous allons donc, from scratch, créer un blueprint de déploiement d'une Docker-VM (qui sera en fait un peu plus que ça).
+C'est donc un use-case adequat pour une solution d'automatisation telle que Calm. Nous allons donc, from scratch, créer un blueprint de déploiement d'une Docker-VM (qui sera en fait un peu plus que ça).
 
 Initialisation du blueprint
 +++++++++++++++++++++++++++
 
-Nous allons commencer par créer un nouveau blueprint. Nous pourrions utiliser l'éditeur de BP mono-VM, mais nous allons préférer le multi-VM, qui sera plus intéressant pour cette phase d'apprentissage.
+Nous allons commencer par créer un nouveau blueprint. 
+
+Nous pourrions utiliser l'éditeur de BP mono-VM, mais nous allons préférer le multi-VM, qui sera plus intéressant pour cette phase d'apprentissage.
 
 Créons ce Blueprint :
 
@@ -36,10 +40,10 @@ Créons ce Blueprint :
 
 #. Validez avec ``Proceed``
 
-Notre blueprint vierge est créé. Félicitations.
+Notre blueprint vierge est créé, c'est un bon début.
 
-Création des variables globales
-+++++++++++++++++++++++++++++++
+Création des variables d'application
+++++++++++++++++++++++++++++++++++++
 
 Nous allons définir ici deux variables qui seront ensuite utilisées dans le blueprint :
     - Initiales : pour différencier nos VMs lors de leurs déploiement
@@ -56,31 +60,29 @@ Nous allons définir ici deux variables qui seront ensuite utilisées dans le bl
     - Name : **Initiales** (Attention à la casse)
     - Data Type : **String**
     - Value : **XYZ**
-    - Cliquez sur le bonhomme pour qu'il devienne bleu, afin que cette variable soit modifiable au lancement.
     - Dans les options supplémentaires :
-        - Label : **Vos intiales**
-    
-    .. image:: images/11.png
-       :alt: Initiales variable
-       :width: 350px
+        - Label : **Vos intiales** 
+    - Cliquez sur le bonhomme pour qu'il devienne bleu, afin que cette variable soit modifiable au lancement.
+       .. image:: images/11.png
+          :alt: Initiales variable
+          :width: 350px
 
 #. Ajoutez une autre variable avec :
     - Name : **Registry** (Attention à la casse)
     - Data Type : **String**
     - Value : laissez vide
-    - Cliquez sur le bonhomme pour qu'il devienne bleu, afin que cette variable soit modifiable au lancement.
     - Dans les options supplémentaires :
-        - Label : **Private Registry**
-        - Description : **Enter here the IP of the private registry** 
+        - Label : **Registry privée**
+        - Description : **Entrez ici l'IP de la registry privée** 
         - Marquez cette variable comme "Mandatory" 
-  
+    - Cliquez sur le bonhomme pour qu'il devienne bleu, afin que cette variable soit modifiable au lancement.
 #. Sauvegardez avec
     .. image:: images/9.png
        :alt: Save
        :width: 150px
 
 
-Creation du crendential
+Création du crédential
 +++++++++++++++++++++++
 
 Dans notre blueprint, nous allons utiliser un compte paramétrable pour nous connecter sur cette machine virtuelle. Nous allons pour cela créer un crédential :
@@ -118,7 +120,7 @@ Dans notre blueprint, nous allons utiliser un compte paramétrable pour nous con
        :alt: Back
        :width: 150px
 
-Nous en avons fini avec la créationd des credentials.
+Nous en avons fini avec la création des credentials.
 
 Création du service et de sa VM
 +++++++++++++++++++++++++++++++
@@ -134,7 +136,7 @@ Nous allonns maintenant créer le service DockerVM, et définir la VM qui va le 
        :alt: Add Service
        :width: 150px
 
-#. Un icône est apparue dans la partie centrale de l'éditeur. Il nous reste à personnaliser ce service via la partie droite de l'écran :
+#. Un icône est apparue dans la partie centrale de l'éditeur. Il nous reste à personnaliser ce service via le panneau des détails à droite de l'écran :
     - On commence par préciser le nom du service. 
       - ServiceName : **DockerVM**
   
@@ -153,7 +155,7 @@ Nous allonns maintenant créer le service DockerVM, et définir la VM qui va le 
 
              #cloud-config
              preserve_hostname: false
-             hostname: @@{initials}@@-docker-vm
+             hostname: @@{Initiales}@@-docker-vm
              ssh_pwauth: true
              users:
                - name: @@{CENTOS.username}@@
@@ -201,18 +203,18 @@ Nous allonns maintenant créer le service DockerVM, et définir la VM qui va le 
  
 On en a fini de la configuration de la VM qui fera tourner ce service. 
 
-Pour résumer les tâches réalisées : on a défini les caractéristiques de la VM qui va être créé pour faire tourner Docker. On lui a défini un Cloud-Init qui permet de créer le user correspondant au credential **CENTOS**, et qui autorise un accès au sudo pour ce dernier.
+Pour résumer les tâches réalisées : on a défini les caractéristiques de la VM qui va être créée pour faire tourner Docker. On lui a défini un Cloud-Init qui permet de créer le user correspondant au credential **CENTOS**, et qui autorise un accès au sudo pour ce dernier.
 
-Nous avons également mis en oeuvre 2 diques : 
+Nous avons également mis en oeuvre 2 disques : 
     - Un pour l'OS copié depuis une image présente sur le cluster
     - Un vierge pour stocker les données Docker
 
-Enfin, nous avons connecté notre VM au réseau pour pouvoir nous y connecter à distance via la carte **NIC1** et demandé à ce que la connexion soit testée et validée avec le suer **CENTOS** lorsque la VM est créé.
+Enfin, nous avons connecté notre VM au réseau pour pouvoir nous y connecter à distance via la carte **NIC1** et demandé à ce que la connexion soit testée et validée avec le user **CENTOS** lorsque la VM est créé.
 
 Ajout des tâches pour le package install
 ++++++++++++++++++++++++++++++++++++++++
 
-Maintenant que notre "coquille" est créé, il faut faire le nécessaire pour que les applications soient déployées sur la VM. On va donc créer les tâches qui vont faire cette opération.
+Maintenant que notre "coquille" est créé, il faut faire le nécessaire pour que les binaires souhaités soient déployés sur la VM. On va donc créer les tâches qui vont faire cette opération.
 
 Voici un aperçu du résultat final :
     .. image:: images/12.png
@@ -220,6 +222,7 @@ Voici un aperçu du résultat final :
        :width: 250px
 
 Pour ajouter des tâches qui seront exécutées lors de la création de la VM, on va aller mettre à jour le "Package Install". Pour cela :
+
 #. Cliquez sur le service à modifier dans le centre de la page (ici **DockerVM**)
 #. Dans le panneau de droite, cliquez sur ``Package``
 #. Dans le Package Name, mettez : **Installation Docker VM**
@@ -242,19 +245,19 @@ Nous allons ajouter notre première tâche  :
 #. Dans le panneau de droite, le détail de la tâche s'est affiché
 #. Donnez un nom à la tâche : **Update OS**
 #. Dans le menu déroulant ``Type`` sélectionnez **Execute**
+#. Dans Scipt Type : **Shell**
 #. Pour le endpoint : Laissez vide
-#. Pour le credential : Utilisez **CENTOS**
 #. Calm dispose d'une bibliothèque de scripts mise à votre disposition, que vous pouvez enrichir à l'envi. Nous allons l'utiliser pour cette tâche :
-    - Cliquez sur
+    #. Cliquez sur
        .. image:: images/14.png
           :alt: Browse library
           :width: 150px
-    
-    - Sélectionnez le script "Update CentOS"
-    - Cliquez sur le bouton blueu ``Select``
-    - Aucune variable n'est présente, on peut donc valider avec le bouton bleu ``Copy``
-    - Notre tâche a été renseignée dans notre blueprint, on peut continuer
 
+    #. Sélectionnez le script "Update CentOS"
+    #. Cliquez sur le bouton blueu ``Select``
+    #. Aucune variable n'est présente, on peut donc valider avec le bouton bleu ``Copy``
+    #. Notre tâche a été renseignée dans notre blueprint, on peut continuer
+#. Pour le credential : Utilisez **CENTOS**
 #. On peut éventuellement sauvegarder notre blueprint
 
 Manuellement
@@ -336,7 +339,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
           docker info
 
           # Adding the centos user to the docker group
-          sudo usermod -aG docker @@{CentOS.username}@@
+          sudo usermod -aG docker @@{CENTOS.username}@@
 
           # Install docker-compose
           sudo yum install -y docker-compose ; echo $?
@@ -518,7 +521,7 @@ Créons cette action
 Test d'un script
 ++++++++++++++++
 
-Déployer une application à partir d'un blueprint peut durer plus de 10mn si il y a beaucoup de substrats à créer, mais aussi pas mal d'actions à réaliser. Dans ce contexte, s'apercevoir que le blueprint a été mal coté et tombe en erreur peut s'avérer frustrant, surtout si, pour débugger, vous modifiez votre script érroné, et que vous relancez le blueprint complet, avec un résultat aléatoire.
+Déployer une application à partir d'un blueprint peut durer plus de 10mn si il y a beaucoup de substrats à créer, mais aussi pas mal d'actions à réaliser. Dans ce contexte, s'apercevoir que le blueprint a été mal codé et tombe en erreur peut s'avérer frustrant, surtout si, pour débugger, vous modifiez votre script érroné, et que vous relancez le blueprint complet, avec un résultat aléatoire.
 
 Pour éviter cet écueil, Calm dispose d'un moyen de tester le script que vous êtes en train de faire, voyons comment.
 
@@ -533,7 +536,7 @@ Pour éviter cet écueil, Calm dispose d'un moyen de tester le script que vous �
 
 #. Dans la fenêtre qui s'affiche, renseignez les infos suivantes :
     - IP Addess : **[Mettre ici l'IP de la registry privée]**
-       - Cette adresse est logiquement une machine qui permet de faire des tests, ou la VM qui a été déployée dans la première exécution de votgre blueprint, et qui est tombé en erreur. Ici nous utilisons cette VM hébergeant la registry pour des questions de simplicité du lab.
+       - Cette adresse est logiquement une machine qui permet de faire des tests, ou la VM qui a été déployée dans la première exécution de votre blueprint, et qui est tombé en erreur. Ici nous utilisons cette VM hébergeant la registry pour des questions de simplicité du lab.
     - Port : **22**
     - Username : **centos**
     - Password : **nutanix/4u**
@@ -549,7 +552,7 @@ Pour éviter cet écueil, Calm dispose d'un moyen de tester le script que vous �
        :alt: Test 
        :width: 100px
 
-#. Dans la partie inférieure de la page, la sortie standard de l'exécution s'affiche, et vous constatez qu'il manque un ``"``
+#. Dans la partie inférieure de la page, la sortie standard de l'exécution s'affiche, et vous constatez une erreur, et un message signifiant qu'il manque un ``"``
 #. Dans la partie haute, corrigez le script en fermant le ``echo`` en ajoutant ``"`` en fin de ligne
 #. Retestez le script
 #. Cette fois tout est ok 
@@ -565,7 +568,7 @@ Pour éviter cet écueil, Calm dispose d'un moyen de tester le script que vous �
 #. Calm va alors vous demander si vous souhaitez conserver les modifications apportées au script
     .. image:: images/25.png
        :alt: Done 
-       :width: 60px
+       :width: 300px
 
 #. Conservez ce script avec le bouton ``Save to blueprint``
 #. Vérifiez/Constatez que le script de la tâche est bien la version corrigée
@@ -596,7 +599,7 @@ Pour déployer ce blueprint :
     - Cela va prendre 10 bonnes minutes, le temps que l'OS soit mis à jour
 
 .. note::
-   Vous constaterz à gauche, dans les actions disponibles sur l'application, la présence de ``Update OS`` notre action de mise à jour de la VM.
+   Vous constaterez à gauche, dans les actions disponibles sur l'application, la présence de ``Update OS`` notre action de mise à jour de la VM.
 
 
 Test de notre VM
