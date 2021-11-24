@@ -104,7 +104,7 @@ Dans notre blueprint, nous allons utiliser un compte paramétrable pour nous con
        - on pourrait utiliser un certificat ici (Recommandé en production), mais pour des raisons de temps, on se contentera du password.
 
     - Password : Ce que vous voulez
-    - Cliquez sur les bonhomme au dessus à droite de ``Username`` et ``Password`` pour permettre leur modification lors de l'exécution.
+    - Cliquez sur les bonhommes au dessus à droite de ``Username`` et ``Password`` pour permettre leur modification lors de l'exécution.
 
       .. image:: images/7.png
          :alt: Credential rempli
@@ -247,12 +247,12 @@ Nous allons ajouter notre première tâche  :
 #. Dans le menu déroulant ``Type`` sélectionnez **Execute**
 #. Dans Scipt Type : **Shell**
 #. Pour le endpoint : Laissez vide
-#. Calm dispose d'une bibliothèque de scripts mise à votre disposition, que vous pouvez enrichir à l'envi. Nous allons l'utiliser pour cette tâche :
-    #. Cliquez sur
-       .. image:: images/14.png
-          :alt: Browse library
-          :width: 150px
-
+#. Calm dispose d'une bibliothèque de scripts mise à votre disposition, que vous pouvez enrichir à l'envie. Nous allons l'utiliser pour cette tâche :
+    #. Cliquez sur :
+          .. image:: images/14.png 
+             :alt: Browse library
+             :width: 150px
+         
     #. Sélectionnez le script "Update CentOS"
     #. Cliquez sur le bouton blueu ``Select``
     #. Aucune variable n'est présente, on peut donc valider avec le bouton bleu ``Copy``
@@ -590,6 +590,7 @@ Pour déployer ce blueprint :
     - App Profile : **Default**
     - Private Registry : **[Mettre ici l'IP de la registry qu'on vous aura communiqué]**
     - Vos initiales : **[Vos initiales]**
+    - Dans les credentials, vous pouvez modifier le user et le mot de passe utilisés pour se connecter si vous le souhaitez
 
 #. Lancez l'exécution avec ``Deploy``
 #. Attendez que l'application s'initialise
