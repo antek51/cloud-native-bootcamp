@@ -149,7 +149,7 @@ Nous allonns maintenant créer le service DockerVM, et définir la VM qui va le 
        - Cores per vCPU : **1**
        - Memory : **2**
        - Guest Customisation : Cochez, et copiez/Collez ce code
-          .. code-block::
+          .. code-block:: yaml
 
              #cloud-config
              preserve_hostname: false
@@ -269,7 +269,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : (Faites un copier/coller)
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
@@ -309,7 +309,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script :
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
@@ -353,7 +353,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : 
-       .. code-block::
+       .. code-block:: bash
           
           #!/bin/bash
 
@@ -372,7 +372,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : 
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
@@ -385,7 +385,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : 
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
@@ -436,7 +436,7 @@ Nous allons modifier l'action ``Start`` pour démarrer Docker lorsqu'on fait un 
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : 
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
@@ -456,7 +456,7 @@ On recommence avec l'action ``Stop``
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : 
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
@@ -474,7 +474,7 @@ On recommence avec l'action ``Restart``
     - Endpoint : vide
     - Credentials : **CENTOS**
     - Script : 
-       .. code-block::
+       .. code-block:: bash
 
           #!/bin/bash
 
