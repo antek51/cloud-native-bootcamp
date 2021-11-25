@@ -241,6 +241,11 @@ Nous allons vérifier le bon fonctionnement de notre load balancer en déployant
    .. figure:: images/app1.jpg
 
 
+
+Avant de passer à la suite, veuillez supprimer le pod ainsi que le service précédement déployé. 
+
+
+
 Rédaction de notre fichier de déploiement de la nouvelle application Fiesta  
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
