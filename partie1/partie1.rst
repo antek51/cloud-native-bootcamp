@@ -12,6 +12,7 @@ Cloner une application de la marketplace
 #. Connectez vous sur PRISM Central avec l'utilisateur **admin** et le mot de passe **nx2Tech123!**
 #. Cliquez sur les 3 traits en haut à gauche de la page, puis ``Services > Calm``
 #. Sélectionnez l'icone Marketplace 
+
     .. image:: images/1.png
        :alt: icône panier
        :width: 40px
