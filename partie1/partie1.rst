@@ -24,8 +24,10 @@ Cloner une application de la marketplace
 #. Cliquez sur **Clone**
 
 #. Renseignez les informations suivantes pour le blueprint :
-    - Nom : **<Initiales>_Fiesta**
-    - Projet : **Bootcamp**
+
+   - Nom : **<Initiales>_Fiesta**
+   - Projet : **Bootcamp**
+
 #. Clonez l'application avec le bouton ``Clone``
 
 Vous voilà avec un blueprint issu de l'application de la marketplace, nous allons pouvoir le modifier pour en faire notre propre application.
@@ -192,6 +194,7 @@ Nous allons maintenant modifier le script de la tâche ``Setup Fiesta App``
      - ``[Service].address`` est valorisée après le démarrage du service
      - ``[Substrat].address`` est valorisée après la création du substrat, et avant l'installation du package
      
+
      Cela peut avoir un impact dans votre développement de blueprint.
     
   .. note::
@@ -241,7 +244,8 @@ Nous allons changer celà en ajoutant un credential dans le blueprint, et en per
    - ``Password`` : Mettez le mot de passe de votre choix
 
 #. Cliquez ensuite sur le petit bonhomme sur la ligne ``Password`` pour qu'il devienne bleu. Cela signifie qu'on va laisser l'utilisateur modifier le mot de passe pour mettre celui de son choix quand il déploiera l'application.
-    Vous devriez avoir ceci : 
+   
+   Vous devriez avoir ceci : 
 
    .. image:: images/18.png
       :alt: Plus
