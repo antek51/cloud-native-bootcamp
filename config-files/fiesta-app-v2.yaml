@@ -17,9 +17,12 @@ spec:
     spec:
       containers:
         - name: fiesta-app
-          image: 10.42.108.45:5000/fiesta:2
+          image: [REPRENDRE IP REGISTRY]:5000/fiesta:latest
           ports:
             - containerPort: 3000
+          env:
+          - name: MARIADB_IP
+            value: [REPRENDRE IP MARIADB]
 ---
 apiVersion: v1
 kind: Service
@@ -32,6 +35,6 @@ spec:
   ports:
     - name: http
       protocol: TCP
-      port: 3000
+      port: 5001
       targetPort: 3000
 ---

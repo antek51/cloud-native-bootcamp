@@ -125,19 +125,17 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
 
 #. Copier et coller le contenu suivant : 
 
-   .. note:: 
-      Remplacer la variable **$DB_SERVER** par l'adresse IP de votre VM user##-MariaDB_VM 
-
 
    .. code-block:: bash
 
       #!/bin/sh
       # Change the Fiesta configuration code so it works in the container
       sed -i "s/REPLACE_DB_NAME/FiestaDB/g" /code/Fiesta/config/config.js
-      sed -i "s/REPLACE_DB_HOST_ADDRESS/$DB_SERVER/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_HOST_ADDRESS/$MARIADB_IP/g" /code/Fiesta/config/config.js
       sed -i "s/REPLACE_DB_DIALECT/mysql/g" /code/Fiesta/config/config.js
       sed -i "s/REPLACE_DB_USER_NAME/fiesta/g" /code/Fiesta/config/config.js
       sed -i "s/REPLACE_DB_PASSWORD/fiesta/g" /code/Fiesta/config/config.js
+      sed -i "s/REPLACE_DB_DOMAIN_NAME/\/\/DB_DOMAIN_NAME/g" /code/Fiesta/config/config.js
 
       # Run the NPM Application
       cd /code/Fiesta
@@ -150,17 +148,17 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
    .. figure:: images/docker2.jpg  
 
 
-#. Il est temps de packager son image docker avec la commande suivante : ``docker build -t user##-fiesta-app:1.0``
+#. Il est temps de packager son image docker avec la commande suivante : ``docker build -t user##-fiesta-app:1.0 --no-cache .``
 
 #. La commande ``docker image ls`` indique que l'image a bien été créée. 
 
 Dans les organisations, l'utilisation d'une registry privée est conseillée pour des raisons de sécurité et de contrôle. 
 
-#. Nous allons maintenant pousser l'application dans la registry pour permettre de l'utiliser depuis notre cluster Karbon avec la commande ``docker push IP-REGISTRY:5000/user##-fiesta-app:1.0``
+#. Nous allons maintenant pousser l'application dans la registry pour permettre de l'utiliser depuis notre cluster Karbon avec la commande ``docker push IP-REGISTRY:5000/user##-fiesta-app``
 
-#. Avant de passer à l'étape suivante, il est utile de tester le conteneur grâce à la commande ``docker run -d --rm -p 5000:3000 IP-REGISTRY:5000/user##-fiesta-app:1.0``
+#. Avant de passer à l'étape suivante, il est utile de tester le conteneur grâce à la commande ``docker run -d --rm -p 5001:3000 IP-REGISTRY:5000/user##-fiesta-app:latest``
 
-#. Ouvrir un navigateur vers l'adresse ``http://IP-DOCKER-VM:3000``
+#. Ouvrir un navigateur vers l'adresse ``http://IP-DOCKER-VM:5001``
 
    .. figure:: images/fiesta.jpg  
 

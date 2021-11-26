@@ -16,16 +16,15 @@ Activation du service Nutanix Karbon
 +++++++++++++++++++++++++++++++++++++++++++++
 
 Pour des raisons de temps, nous avons déjà activé et mis à jour Karbon. Vous pouvez néanmoins visionner comment s'active le service grâce à l'enregistrement suivant : 
+
    .. raw:: html 
 
-      <iframe width="560" height="340"
-      src="https://youtu.be/ahzB27LQSvQ">
-      </iframe>      
-
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/ahzB27LQSvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
    .. note::
 
       L'activation du service prend quelques minutes. En tâche de fond, l'outil déploie 2 conteneurs dans la VM Prism Central.      
+
         - **karbon-ui** prend en charge l'interface graphique, les requêtes API du moteur Karbon.
         - **karbon-core** est l'orchestrateur du runtime Kubernetes et tout ce qui est en r
 
@@ -50,6 +49,7 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
 
 
 #. Etape 2 : Configuration générale
+
       - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user##-karbon**
       - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
       - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
@@ -58,18 +58,21 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
    .. figure:: images/karbon2.jpg
 
 #. Etape 3 : Configuration des noeuds 
+
       - Nous allons installer le cluster Karbon sur le réseau **Secondary** 
       - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
 
    .. figure:: images/karbon3.jpg
 
 #. Etape 4 : Configuration du réseau interne 
+
 Cette étape permet de choisir le provider CNI de notre choix. Aujourd'hui Calico et Flannel sont intégrés nativement. D'autres CNI sont étudiés pour apporter d'avantage de choix pour les clients. 
       - Choisir entre **Flannel** ou **Calico** (cela n'a pas d'impact sur la suite sur lab)
 
    .. figure:: images/karbon4.jpg
 
 #. Etape 5 : Configuration de l'accès au stockage 
+
       - Cette dernière partie va nous permettre de gérer la configuration de la couche de stockage "bloc" dont va pouvoir bénéficier le cluster Kubernetes pour les applications nécessitant du stockage persistent. (Laisser les réglages par défaut)
 
    .. figure:: images/karbon5.jpg
@@ -180,11 +183,11 @@ Notre cluster Karbon doit pouvoir accéder à notre bibliothèque d'image intern
 
 #. La commande suivante permet de se logger sur la CLI de Karbon (Karbonctl) : ``./karbon/karbonctl login --pc-username admin --pc-password nx2Tech123! cc``
 
-#. Ajouter la registry dans le service Karbon : ``./karbon/karbonctl registry add --name registry --url IP-REGISTRY --port 5000``
+#. Ajouter la registry dans le service Karbon : ``./karbon/karbonctl registry add --name registry --url [IP-REGISTRY] --port 5000``
 
 #. Vérifier que la registry a bien été ajoutée : ``./karbon/karbonctl registry list``
 
-#. Ajouter la resgistry à votre cluster Karbon : ``./karbon/karbonctl cluster registry add --cluster-name NOM-CLUSTER-KARBON --registry-name registry``
+#. Ajouter la resgistry à votre cluster Karbon : ``./karbon/karbonctl cluster registry add --cluster-name [NOM-CLUSTER-KARBON] --registry-name registry``
 
 
 
@@ -238,6 +241,11 @@ Nous allons vérifier le bon fonctionnement de notre load balancer en déployant
    .. figure:: images/app1.jpg
 
 
+
+Avant de passer à la suite, veuillez supprimer le pod ainsi que le service précédement déployé. 
+
+
+
 Rédaction de notre fichier de déploiement de la nouvelle application Fiesta  
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -249,10 +257,11 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
 
 #. Créer le fichier ``vi fiesta-app-v2.yaml``
 
-#. Coller le contenu suivant **en prenant soin de modifier l'adresse IP et le port de la registry ainsi que le nom de votre image de l'application Fiesta**. Il contient la configuration du déploiement de l'application ainsi que le service qui publie l'application à l'extérieur du cluster. 
+#. Coller le contenu suivant **en prenant soin de modifier l'adresse IP et le port de la registry, le nom de votre image de l'application Fiesta ainsi que l'IP de la VM MariaDB**. Il contient la configuration du déploiement de l'application ainsi que le service qui publie l'application à l'extérieur du cluster. 
 
    .. code-block:: yaml
       
+      ---
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -271,9 +280,12 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
          spec:
             containers:
             - name: fiesta-app
-               image: IP-REGISTRY:PORT/NOM-IMAGE:latest
+               image: [REPRENDRE IP REGISTRY]:5000/[VOTRZ IMAGE FIESTA]:latest
                ports:
                   - containerPort: 3000
+               env:
+               - name: MARIADB_IP
+                  value: [REPRENDRE IP MARIADB]
       ---
       apiVersion: v1
       kind: Service
@@ -286,10 +298,12 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
       ports:
          - name: http
             protocol: TCP
-            port: 3000
+            port: 5001
             targetPort: 3000
       ---
+      
 
+      
 #. Suivez le déploiement de l'application dans k9s et notez l'adresse du service **fiesta-app-service**
 
    .. figure:: images/k9s4.jpg
@@ -303,3 +317,8 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
 Félicitations ! Votre application "legacy" est maintenant hébergée sur des technologies modernes sur une seule et même plateforme. 
 
    .. figure:: images/yes.gif
+
+
+Avant de passer à la suite, il faut supprimer votre application Fiesta sur votre cluster Karbon car nous n'avons pas assez d'IP externe pour satisfaire les besoins de l'étape suivante. Pour cela vous pouvez utiliser ``kubectl`` ou ``k9s`` selon votre humeur.
+
+Bien penser à supprimer le deployment ainsi que le service. 
