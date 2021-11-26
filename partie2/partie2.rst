@@ -49,9 +49,10 @@ Création des variables d'application
 ++++++++++++++++++++++++++++++++++++
 
 Nous allons définir ici deux variables qui seront ensuite utilisées dans le blueprint :
-    - Initiales : pour différencier nos VMs lors de leurs déploiement
-    - Registry : qui sera l'IP de la registry docker privée utilisée dans notre lab
-       - Nous avons besoin de la déclarer comme Registry autorisée mais non sécurisée, d'où cette variable.
+
+- Initiales : pour différencier nos VMs lors de leurs déploiement
+- Registry : qui sera l'IP de la registry docker privée utilisée dans notre lab
+  - Nous avons besoin de la déclarer comme Registry autorisée mais non sécurisée, d'où cette variable.
 
 #. Cliquez sur ``Application Profile > Default``
 #. Dans la partie droite de la fenêtre, à droite de variables, cliquez sur le ``+``
@@ -342,7 +343,7 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
 
         # Add mount point to fstab
         drive_uuid=$(sudo blkid /dev/sdb1 | cut -d "\"" -f 2)
-       sudo echo "UUID=$drive_uuid    /docker-location    ext4    defaults    1 3" | sudo tee -a /etc/fstab
+        sudo echo "UUID=$drive_uuid    /docker-location    ext4    defaults    1 3" | sudo tee -a /etc/fstab
 
 #. Ajouter une tâche 
    
@@ -698,7 +699,7 @@ Une fois notre VM déployée, nous allons nous connecter sur la VM pour vérifie
    
    .. image:: images/26.png
       :alt: Hello World
-      :width: 350px
+      :width: 550px
 
 Félicitations, on a préparé notre VM Docker via Calm pour la suite des opérations. 
    
