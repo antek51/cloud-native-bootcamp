@@ -52,6 +52,7 @@ Nous allons définir ici deux variables qui seront ensuite utilisées dans le bl
 
 - Initiales : pour différencier nos VMs lors de leurs déploiement
 - Registry : qui sera l'IP de la registry docker privée utilisée dans notre lab
+
   - Nous avons besoin de la déclarer comme Registry autorisée mais non sécurisée, d'où cette variable.
 
 #. Cliquez sur ``Application Profile > Default``
