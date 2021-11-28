@@ -1,7 +1,10 @@
 .. _option3:
 
+----
+Test
+----
 ---------------------------------------------------------------------
-Activité optionnelle 3 : sécuriser des opérations day 2 par snapshots
+Sécuriser des opérations day 2 par snapshots
 ---------------------------------------------------------------------
 
 Dans cette partie, nous allons voir comment sécuriser une VM avec un snapshot, lors des opérations à risque.
