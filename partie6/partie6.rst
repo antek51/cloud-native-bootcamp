@@ -167,7 +167,7 @@ Nous allons sécuriser par snapshot l'action ``update OS`` créée plus tôt.
          :alt: Update os Final
          :width: 300px
 
-   #. Sauevgardez votre blueprint
+   #. Sauvegardez votre blueprint
 
 Bravo, vous venez de sécuriser une opération à risque disponible sur votre blueprint. Les consommateurs de cette application n'auront donc plus de soucis à se faire, ils auront des snapshots récents automatisés, et sauront réaliser des retours arrière eux-même.
 
