@@ -1,7 +1,7 @@
 .. _phase6_optional:
 
 ---------------------------------------------------------------------
-Lab optionnel : Installtion du dashboard K8S
+Lab optionnel : Installation du dashboard K8S
 ---------------------------------------------------------------------
 
 

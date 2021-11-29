@@ -17,27 +17,28 @@ Activation du service Nutanix Karbon
 
 Pour des raisons de temps, nous avons déjà activé et mis à jour Karbon. Vous pouvez néanmoins visionner comment s'active le service grâce à l'enregistrement suivant : 
 
-   .. raw:: html 
+.. raw:: html 
 
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/ahzB27LQSvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+   <iframe width="560" height="315" src="https://www.youtube.com/embed/ahzB27LQSvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-   .. note::
+.. note::
 
-      L'activation du service prend quelques minutes. En tâche de fond, l'outil déploie 2 conteneurs dans la VM Prism Central.      
+   L'activation du service prend quelques minutes. En tâche de fond, l'outil déploie 2 conteneurs dans la VM Prism Central.      
 
-        - **karbon-ui** prend en charge l'interface graphique, les requêtes API du moteur Karbon.
-        - **karbon-core** est l'orchestrateur du runtime Kubernetes et tout ce qui est en r
+   - **karbon-ui** prend en charge l'interface graphique, les requêtes API du moteur Karbon.
+   - **karbon-core** est l'orchestrateur du runtime Kubernetes et tout ce qui est en relation avec la gestion des clusters.
 
 
-Nous allons maintenant créer notre cluster Karbon et générer le fichier de déploiement de l'application pour l'héberger maintenant sur une base technologique de type cloud native. 
+Nous allons maintenant créer notre cluster Karbon et générer le fichier de déploiement de l'application pour l'héberger sur une base technologique de type cloud native. 
 
 #. Dans le menu "burger" sélectionner **Services** puis **Karbon**. 
 
-#. Vérifier que l'image **OS Images** est bien téléchargée. C'est l'image qui sera utiliser pour construire les machines virtuelles qui hébergeront le cluster Kubernetes. 
+#. Vérifier que l'image **OS Images** est bien téléchargée. C'est l'image qui sera utiliser pour construire les machines virtuelles qui hébergeront le cluster Kubernetes. L'OS de ces VM est fournit par Nutanix qui en assure le maintient et la sécurisation. 
 
 #. Créer maintenant votre cluster Kubernetes grâce au bouton **Create Kubernetes Cluster** 
 
    .. figure:: images/karbon1.jpg
+      :alt: Boutton Create
 
 #. Etape 1 : Selectionner un cluster de type **Development** pour des raisons simples de ressources disponibles sur la plateforme. 
 
@@ -50,61 +51,67 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
 
 #. Etape 2 : Configuration générale
 
-      - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user##-karbon**
-      - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
-      - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
-      - Renseigner l'image Host OS à utiliser (**Selectionner la version la plus récente**)
+   - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user[VOTRE NUMERO]-karbon**
+   - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
+   - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
+   - Renseigner l'image Host OS à utiliser (**Selectionner la version la plus récente**)
 
    .. figure:: images/karbon2.jpg
+      :alt: Config cluster 
 
 #. Etape 3 : Configuration des noeuds 
 
-      - Nous allons installer le cluster Karbon sur le réseau **Secondary** 
-      - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
+   - Nous allons installer le cluster Karbon sur le réseau **Secondary** 
+   - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
 
    .. figure:: images/karbon3.jpg
+      :alt: Config node 
 
 #. Etape 4 : Configuration du réseau interne 
 
-Cette étape permet de choisir le provider CNI de notre choix. Aujourd'hui Calico et Flannel sont intégrés nativement. D'autres CNI sont étudiés pour apporter d'avantage de choix pour les clients. 
-      - Choisir entre **Flannel** ou **Calico** (cela n'a pas d'impact sur la suite sur lab)
+   Cette étape permet de choisir le provider CNI de notre choix. Aujourd'hui Calico et Flannel sont intégrés nativement. D'autres CNI sont étudiés pour apporter d'avantage de choix pour les clients. 
+      
+   - Choisir entre **Flannel** ou **Calico** (cela n'a pas d'impact sur la suite sur lab)
 
    .. figure:: images/karbon4.jpg
+      :alt: Config CNI
 
 #. Etape 5 : Configuration de l'accès au stockage 
 
-      - Cette dernière partie va nous permettre de gérer la configuration de la couche de stockage "bloc" dont va pouvoir bénéficier le cluster Kubernetes pour les applications nécessitant du stockage persistent. (Laisser les réglages par défaut)
+   - Cette dernière partie va nous permettre de gérer la configuration de la couche de stockage "bloc" dont va pouvoir bénéficier le cluster Kubernetes pour les applications nécessitant du stockage persistent. (Laisser les réglages par défaut)
 
    .. figure:: images/karbon5.jpg
+      :alt: Config stockage
 
 #. Pour finir cliquer sur **Create** pour lancer la création du cluster. Cela devrait prendre moins de 10 minutes. Vous pouvez monitorer l'avancement et observer l'apparition de nouvelles VMs sur le cluster Nutanix. 
 
-Notre cluster Kubernetes est en cours de création et sera livré avec : 
-      - le CNI de votre choix configuré
-      - le driver CSI permettant l'accès au stockage bloc et fichier installé 
-      - Une stack de gestion des logs EFK - ElasticSearch Fluentd Kibana permettant la gestion des logs du cluster k8s lui même 
-      - Une gestion du monitoring et des métriques (node exporter, metric server, prometheus)
+   Notre cluster Kubernetes est en cours de création et sera livré avec : 
+
+   - le CNI de votre choix configuré
+   - le driver CSI permettant l'accès au stockage bloc et fichier installé 
+   - Une stack de gestion des logs EFK - ElasticSearch Fluentd Kibana permettant la gestion des logs du cluster k8s lui même 
+   - Une gestion du monitoring et des métriques (node exporter, metric server, prometheus)
 
 
 Connexion au cluster Karbon 
 +++++++++++++++++++++++++++++++++++++
-#. Vérifier que le cluster Karbon ai terminé son installation. 
+#. Vérifier que le cluster Karbon ait terminé son installation. 
 
 #. Sélectionner votre cluster Karbon dans la liste et cliquer sur **Download Kubeconfig**
 
 #. Ouvrir le fichier **kubeconfig** et copier son contenu. 
 
-#. Se connecter à notre docker VM en ssh. 
+#. Se connecter à notre docker VM **[INITIALES]-DockerVM** en ssh. 
 
 #. Créer un dossier ``mkdir .kube``
 
-#. Créer un fichier dans le répertoire courant ``vi .kube/config`` et coller le contenu du kubeconfig file téléchargé. 
+#. Créer un fichier dans le répertoire courant ``vi .kube/config``, passer en mode insertion avec **i** et coller le contenu du kubeconfig file téléchargé. 
 
 #. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
 #. Configurer la variable d'environnement avec la commande ``export KUBECONFIG=$HOME/.kube/config``
 
-#. Tester l'accès au cluster en tapant la commande ``kubectl cluster-info``. Noter l'IP du cluster et comparer avec l'information dans Prism Central / Karbon. 
+#. Tester l'accès au cluster en tapant la commande ``kubectl cluster-info``. Noter l'IP du cluster et comparer avec l'information dans Prism Central > Karbon > Votre cluster. 
 
 #. Kubectl -> k 
 
@@ -236,7 +243,7 @@ Nous allons vérifier le bon fonctionnement de notre load balancer en déployant
 
    .. figure:: images/k9s3.jpg
 
-#. Dans votre navigateur, se connecter sur l'ip de l'application **http://@IP-APPLICATION**
+#. Dans votre navigateur, se connecter sur l'ip de l'application **http://[IP-APPLICATION]**
 
    .. figure:: images/app1.jpg
 
@@ -280,7 +287,7 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
          spec:
             containers:
             - name: fiesta-app
-               image: [REPRENDRE IP REGISTRY]:5000/[VOTRZ IMAGE FIESTA]:latest
+               image: [IP-REGISTRY]:5000/[INITIALES]-fiesta-app:latest
                ports:
                   - containerPort: 3000
                env:
@@ -308,7 +315,7 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
 
    .. figure:: images/k9s4.jpg
 
-#. Dans votre navigateur, se connecter sur l'ip de l'application **http://@IP-APPLICATION**
+#. Dans votre navigateur, se connecter sur l'ip de l'application **http://[IP-SERVICE]:5001**
 
    .. figure:: images/fiesta.jpg
 
@@ -316,9 +323,10 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
 
 Félicitations ! Votre application "legacy" est maintenant hébergée sur des technologies modernes sur une seule et même plateforme. 
 
-   .. figure:: images/yes.gif
+.. figure:: images/yes.gif
 
 
-Avant de passer à la suite, il faut supprimer votre application Fiesta sur votre cluster Karbon car nous n'avons pas assez d'IP externe pour satisfaire les besoins de l'étape suivante. Pour cela vous pouvez utiliser ``kubectl`` ou ``k9s`` selon votre humeur.
-
-Bien penser à supprimer le deployment ainsi que le service. 
+.. warning::
+   Avant de passer à la suite, il faut supprimer votre application Fiesta sur votre cluster Karbon car nous n'avons pas assez d'IP externe pour satisfaire les besoins de l'étape suivante. Pour cela vous pouvez utiliser ``kubectl`` ou ``k9s`` selon votre humeur.
+   
+   Bien penser à supprimer le deployment ainsi que le service. 
