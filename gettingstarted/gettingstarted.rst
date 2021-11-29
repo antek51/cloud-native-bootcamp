@@ -38,8 +38,11 @@ Ressources
 +++++++++++++++++
 
 Adresse Prism Central : 
-  - Compte : ``admin``
-  - Password : ``nx2Tech123!``
+  - Cluster 1 : user01 au user15 
+    - Compte : ``admin``
+    - Password : ``nx2Tech123!``
+
+  - Cluster 2 = user16 au user30
 
 Adresse Registry privée : 
   - Port utilisé : 
