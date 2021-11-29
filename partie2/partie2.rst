@@ -183,7 +183,7 @@ Nous allonns maintenant créer le service DockerVM, et définir la VM qui va le 
 
           #cloud-config
           preserve_hostname: false
-          hostname: @@{Initiales}@@-docker-vm
+          fqdn: @@{Initiales}@@-docker-vm
           ssh_pwauth: true
           users:
           - name: @@{CENTOS.username}@@

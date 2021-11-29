@@ -99,6 +99,8 @@ Par manque de temps, nous allons simplement dupliquer un blueprint existant.
   
    - Un pod ``Fiesta-Pod`` qui n'utilise ici, qu'un conteneur appelé ``Fiesta_Container``
 
+     - Le gouvernail bleu signifie qu'il s'agit d'un cluster Kubernetes
+
 #. Cliquez sur pod ``Fiesta_Pod``
 
 #. Dans le panneau des détails à droite, sélectionnez ``Deployment`` si ce n'est déjà fait
@@ -108,6 +110,15 @@ Par manque de temps, nous allons simplement dupliquer un blueprint existant.
    .. image:: images/8.png
       :alt: Accounts
       :width: 250px
+
+#. Cliquez maintenant sur l'onglet Container
+
+#. Dans la partie image, mettez : **[IP de la registry]:5000/[Initiales]-fiesta-app**
+
+   .. image:: images/18.png
+      :alt: Image
+      :width: 250px
+
 
 #. Sauvegardez avec ``Save`` en haut à droite de la page.
 
