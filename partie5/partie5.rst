@@ -62,6 +62,8 @@ Associons maintenant ce cluster Karbon au projet que nous utilisons.
 
 #. Sauvegardez avec Save (en haut à droite)
 
+
+
 C'en est terminé pour cette opération
 
 Création du blueprint
@@ -189,7 +191,10 @@ Publions maintenant sur la Marketplace cette nouvelle version de l'application.
    - Retrouvez votre blueprint et cliquez dessus (attention à la version pour retrouver le **2.0.0**)
    - A droite cliquez sur **Publish**
 
-#. Allez dans la Marketplace, vous verrez votre application sous les 2 versions.
+#. Allez dans la Marketplace, vous verrez votre application sous les 2 versions. 
+   
+   - Attention, vous ne pourrez déployer cette application que si l'environnement du projet a été correctement créé, ce qui n'est pas le cas encore ici. Idéalement nous aurions du le faire lors de l'ajout du compte au projet, mais pour des raisons de timing, nous ne l'avons pas réalisé. Si vous voulez le faire, suivez le détail de l'opération suivante.
+
 
 Vous avez terminé et bouclé la boucle : 
 
@@ -201,3 +206,94 @@ Vous avez terminé et bouclé la boucle :
 .. image:: images/boss.png
    :alt: Boss
    :width: 250px
+
+
+Facultatif : Création de l'environnement pour l'exécustion depuis la marketplace
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Si vous essayez de déployer l'application en v2 depuis la Marketpace, cela vous sera refusé, car le project ``Bootcamp`` ne contient pas d'environnement permettant d'utiliser votre cluster Karbon. 
+
+Nous allons en créer un succinctement. Les valeurs mentionnées ici ne seront pas importantes étant donné que tout est déjà embarqué dans notre blueprint.
+
+Voici comment faire :
+
+#. Cliquez sur l'icône ``Projects``
+
+   .. image:: images/1.png
+      :alt: Icone Projects
+      :width: 40px
+
+#. Cliquez sur ``Bootcamp``
+#. 
+#. Cliquez maintenant sur l'onglet ``Environments``
+
+#. Cliquez sur le bouton 
+
+   .. image:: images/12.png
+      :alt: Icone BP
+      :width: 150px
+
+#. Donnez lui le nom : **Mixte-VM-Karbon_User[Votre numéro]**, renseignez une description si vous le voulez, et validez avec `` Next``
+
+#. Dans la page suivante, Utilisez ``Select Account`` et sélectionnez **Karbon_User[Votre Numéro]**
+
+#. Cet account va s'ajouter immédiattement à la liste de gauche. 
+
+#. Utilisez le bouton ``+ Add account`` en haut de cette liste, pour ajouter un autre compte.
+
+#. Sélectionnez le cluster Nutanix **NTNX_LOCAL_AZ**
+
+#. Dans la partie droite, cliquer sur
+   
+   .. image:: images/13.png
+      :alt: Edit Cluster
+      :width: 150px 
+
+#. Sélctionnez le Cluster Nutanix, puis cochez la case du réseau **Primary**
+
+#. Validez avec le bouton **Confirm**
+
+#. Cliquez ensuite sur
+   
+   .. image:: images/14.png
+      :alt: VM Configuration
+      :width: 450px 
+
+#. Puis sur l'onglet suivant
+
+   .. image:: images/15.png
+      :alt: Linux
+      :width: 100px 
+
+#. Dans les champs qui sont apparus, renseignez les valeurs suivantes (laissez en l'état ceux non mentionnés):
+  
+   - vCPU : **2**
+   - Cores per vCPU : **1**
+   - Memory : **4**
+   - Disk 1 > Image : **CentOS7.qcow2**
+   - NIC : Cliquez sur le ``+`` pour en ajouter une et associez lui le réseau **Primary**
+
+#. Faites Next
+
+#. Ajouter un Credentiel en cliquant sur ``+ Add Crendentials`` puis dans les champs affichés, renseginez :
+
+   - Credential Name : **CENTOS**
+   - Usenamr : **centos**
+   - Scret Type : **Password**
+   - Password : **nutanix/4u**
+
+#. Validez avec 
+
+   .. image:: images/16.png
+      :alt: Save environment
+      :width: 150px
+
+#. Vous revenez alors à la page des environnement, et vous devez avoir ceci :
+
+   .. image:: images/17.png
+      :alt: New environment
+      :width: 250px
+
+#. Il est important d'avoir ``Marketplace Usage`` non grisé, avec un 'Check' à sa gauche. 
+
+Vous pouvez maintenant déployer votre application depuis la Marketplace. Il faudra bien veillez à sélectionner ce nouvel environnement lors du déploiement, sinon cela ne sera pas possible de le déployer.
