@@ -203,9 +203,9 @@ Vous avez terminé et bouclé la boucle :
 - Vous avez créé un déploiement automatique de cette nouvelle application par Calm
 - Pour conclure, vous avez mis à jour la Marketplace pour utiliser la nouvelles version de d'application.
 
-.. image:: images/boss.png
-   :alt: Boss
-   :width: 250px
+  .. image:: images/boss.gif
+     :alt: Boss
+     :width: 250px
 
 
 Facultatif : Création de l'environnement pour l'exécustion depuis la marketplace
