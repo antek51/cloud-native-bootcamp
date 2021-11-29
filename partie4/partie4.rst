@@ -61,7 +61,7 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
 
 #. Etape 3 : Configuration des noeuds 
 
-   - Nous allons installer le cluster Karbon sur le réseau **Secondary** 
+   - Nous allons installer le cluster Karbon sur le réseau **SECONDARY**  
    - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
 
    .. figure:: images/karbon3.jpg

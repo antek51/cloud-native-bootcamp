@@ -4,6 +4,59 @@
 Lab optionnel : Installation du dashboard K8S
 ---------------------------------------------------------------------
 
+Nous avons vu que le service embarqué Nutanix Karbon permet de livrer très facilement des clusters Kubernetes "production ready". 
+
+La distribution utilisée par Karbon est dite **Certified Kubernetes** et donc certifiée par l'organisme CNCF en charge de Kubernetes au niveau global. 
+Cela veut dire qu'aucun code utilisé dans Karbon n'est rendu propriétaire. 
+
+Cela nous **offre une compatibilité native** avec un écosystème très large. Pour donner un exemple, vous pouvez retrouver sur le lien suivant le landscape CNCF : https://landscape.cncf.io/
+
+Afin d'illustrer ces propos, nous allons installer le **dashboard Kubernetes**. 
+
+Vous pouvez utiliser le dashboard pour déployer des applications conteneurisées, faire de la remédiation et manager les ressources d'un cluster. Le dashboard vous fournit une vue globale des applications déployées sur un cluster et vous permet de créer et/ou modifier les ressources (déploiement, jobs, deamonsets, etc). Vous pouvez par exemple demander un "scale" d'un déploiement, initier une mise à jour "rolling update", redémarer un pod, déployer de nouvelles applications, etc ... 
+
+Déploiement du dashboard et ressources associées 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. L'installation du dashboard est simple à lancer, le manifest YAML est disponible sur GitHub. 
+  - Taper la commande : ``kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml``
+
+
+La liste des ressources créés va s'afficher : 
+
+   .. image:: images/dash01.jpg
+      :alt: dashboard
+
+#. Utiliser k9s pour naviguer dans les ressources et découvrir le **Namespace** créé par le déploiement du manifest. 
+
+   .. image:: images/dash02.png
+      :alt: namespace 
+
+#. Nous allons utiliser un autre mécanisme pour joindre l'application que celui utilisé avec l'application Fiesta. La ressource "Port Forward" est une ressource très utile dans le contexte Kubernetes car il permet notamment de pouvoir joindre depuis l'extérieur n'importe quel pod ou service directement. Cela est donc très utile lors des phases de troubleshooting et permet de mettre en lumière le maillon défaillant de la chaine de liaison. 
+
+Pour cela dans k9s, se positionner sur le pod **kubernetes-dashboard-[ID UNIQUE]** et pressez les touches ``shift + f``. 
+
+#. Une nouvelle fenêtre va apparaitre qui permet de modifier les paramètres du port forward. Noter le n° du port proposé et valider la création du port forward. 
+
+   .. image:: images/pf.jpg
+      :alt: port forward  
+
+#. Sur votre navigateur naviguer vers ``https://localhost:[NUM PORT FORWARD]/`` et utiliser la méthode d'authentification **Kubeconfig**. Pour cela retrouver votre fichier Kubeconfig et cliquer sur **Sign In**. 
+
+   .. image:: images/dash03.jpg
+      :alt: Dashboard UI  
+
+
+#. Vous êtes ainsi connecté au Dashboard Officiel de Kubernetes. Parcourez les menus et comparer l'expérience avec k9s. 
+
+   .. image:: images/dash04.png
+      :alt: Dashboard UI 2  
+
+
+
+#. Pensez à terminer de **Port Forward** sinon la ressource restera joignable. Pour cela dans k9s taper ``:portforward`` suivit de ``ctrl + d``pour le supprimer. 
+
+
 
 ---------------------------------------------------------------------
 Lab optionnel : Sécuriser des opérations day 2 par snapshots
