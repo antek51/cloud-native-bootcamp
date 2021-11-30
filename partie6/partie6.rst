@@ -19,10 +19,11 @@ Déploiement du dashboard et ressources associées
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #. L'installation du dashboard est simple à lancer, le manifest YAML est disponible sur GitHub. 
-  - Taper la commande : ``kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml``
+
+   - Taper la commande : ``kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml``
 
 
-La liste des ressources créés va s'afficher : 
+   La liste des ressources créés va s'afficher : 
 
    .. image:: images/dash01.jpg
       :alt: dashboard
@@ -54,7 +55,7 @@ Pour cela dans k9s, se positionner sur le pod **kubernetes-dashboard-[ID UNIQUE]
 
 
 
-#. Pensez à terminer de **Port Forward** sinon la ressource restera joignable. Pour cela dans k9s taper ``:portforward`` suivit de ``ctrl + d``pour le supprimer. 
+#. Pensez à terminer de **Port Forward** sinon la ressource restera joignable. Pour cela dans k9s taper ``:portforward`` suivit de ``ctrl + d`` pour le supprimer. 
 
 
 
