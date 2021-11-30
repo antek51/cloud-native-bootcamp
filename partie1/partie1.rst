@@ -47,7 +47,7 @@ Cliquez sur l'icône **Fiesta**.
        :alt: Panneau des services
        :width: 250px
 
-  - Dans ce panneau on va retrouver les ``services`` qui sont utilisés dans l'application. Par exemple ici, MariaDB qui sera une base de donnée, et Fiesta, une application marchande Web
+  - Dans ce panneau on va retrouver les ``services`` qui sont utilisés dans l'application. Par exemple ici, MariaDB qui sera une base de données, et Fiesta, une application marchande Web
   - ``Update Config`` est une entrée particulière permettant de changer les caractéritiques (vCPU, vRAM, catégories, etc.) des VM utilisées par les services
   - ``Application Profile`` correspond à différents types de déploiements qu'on pourrait vouloir faire : Prod, PréProd, On-Prem, Cloud-Azure, Hybride. Par défaut il n'y a qu'un profil par défaut, le développeur des blueprints peut en créer autant qu'il le souhaite.
 
@@ -108,7 +108,7 @@ Une tâche peut être de 4 types :
 - Une instanciation de variable
 - Une pause
 
-Une appel à une action permet, lui, d'exécuter une action qui a été définie dans un des services, et qu'on souhaite appeler, un peu comme on le fait avec une fonction dans un langage de programmation. Ces actions peuvent être automatiquement créées par Calm (Start, Stop, Restart, Create, Delete et Soft Delete) ou créées par le développeur, à sa convenance.
+Un appel à une action permet, lui, d'exécuter une action qui a été définie dans un des services, et qu'on souhaite appeler, un peu comme on le fait avec une fonction dans un langage de programmation. Ces actions peuvent être automatiquement créées par Calm (Start, Stop, Restart, Create, Delete et Soft Delete) ou créées par le développeur, à sa convenance.
 
 Les 3 blocs présents ici, pour le package install, sont des tâches exécutant des scripts. En cliquant sur l'un d'eux, on a, dans le panneau des détails, le contenu de ce script.
 
@@ -123,6 +123,8 @@ Il est possible d'afficher en grand le script pour une modification plus aisée 
 .. image:: images/9.png
    :alt: Zoom on script
    :width: 400px
+
+Pour refermer la zone d'édition de script, il faut cliquer sur le ``X`` en haut à droite de cette dernière.
 
 Modification du blueprint
 +++++++++++++++++++++++++
@@ -197,6 +199,8 @@ Nous allons maintenant modifier le script de la tâche ``Setup Fiesta App``
 
      Cela peut avoir un impact dans votre développement de blueprint.
     
+
+
   .. note::
      Calm gère l'autocomplétion des variables. Si vous appuyez sur ``Ctrl + [Espace]`` dans un script, Calm proposera les variables possible en fonction du début de la zone de texte.
           
@@ -242,8 +246,9 @@ Nous allons changer celà en ajoutant un credential dans le blueprint, et en per
    - ``Username`` : **root**
    - ``Secret Type`` : **Password**
    - ``Password`` : Mettez le mot de passe de votre choix
+   - Cliquez ensuite sur le petit bonhomme sur la ligne ``Password`` pour qu'il devienne bleu.
 
-#. Cliquez ensuite sur le petit bonhomme sur la ligne ``Password`` pour qu'il devienne bleu. Cela signifie qu'on va laisser l'utilisateur modifier le mot de passe pour mettre celui de son choix quand il déploiera l'application.
+     - Cela signifie qu'on va laisser l'utilisateur modifier le mot de passe pour mettre celui de son choix quand il déploiera l'application.
    
    Vous devriez avoir ceci : 
 
@@ -314,7 +319,7 @@ Exécutons ce blueprint.
       :alt: Application
       :width: 600px
 
-#. En cliquant sur l'onglet ``Manage``, vous allez pouvoir suivre le déploiement de l'application étapes par étapes (il faudra éventuellement cliquer sur l'oeil). 
+#. En cliquant sur l'onglet ``Manage``, vous allez pouvoir suivre le déploiement de l'application étapes par étapes (il faudra éventuellement cliquer sur l'oeil à droite de l'action ``Create``). 
     
    - Un rond bleu signifie que l'opération est en cours
    - un rond vert qu'elle est terminée avec succès
@@ -358,7 +363,7 @@ Exécutons ce blueprint.
       :alt: Delete
       :width: 200px
 
-#. L'application va se supprimer. Attendez que ``Running`` devienne ``deleted``
+#. L'application va se supprimer. L'application va passer de ``Running`` à ``deleted``. Vous n'êtes pas obligés d'attendre pour passer à l'étape suivante.
    
    .. image:: images/29.png
       :alt: Deleted
@@ -367,7 +372,7 @@ Exécutons ce blueprint.
 Publication sur la Marketplace
 ++++++++++++++++++++++++++++++
 
-Une fois le blueprint validé, nous allons le mettre à disposition sur la marketplace :
+En tant que développeur, on vient de finir et valider notre blueprint. Nous allons le mettre à dispoistion sur la Marketplace pour que les équipes projets puisse le "consommer" à leur guise, en toute autonomie.
 
 #. Retournez sur la liste des blueprint par le menu de gauche
    
@@ -438,7 +443,7 @@ Le blueprint étant maintenant validé, il est possible de le publier, c'est à 
 Déploiement de l'application depuis la Marketplace
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Nous allons maintenant déployer notre application.
+Nous allons maintenant déployer notre application comme le ferait un mêmbre de l'équipe projet qui souhaite déployer un nouveau site marchand du type Fiesta.
 
 #. Rendez-vous sur la marketplace en cliquant sur l'icone qui se trouve tout en haut de la page sur la gauche.
 #. Cliquez sur le bouton ``Get`` de la tuile correspondant à votre application

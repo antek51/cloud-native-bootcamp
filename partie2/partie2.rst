@@ -7,6 +7,7 @@
 Pour la conteneurisation d'une application, nous allons avoir besoin d'une machine avec Docker installé, ainsi que quelques outils pratiques pour interagir avec Karbon/Kubernetes.
 
 C'est typiquement un type de machine qu'on va redéployer régulièrement, pour les raisons suivantes :
+
 - En général on a une machine mise à disposition par développeur, il faudra donc en déployer plusieurs, et lors de chaque mouvement de personnel devant développer.
 - Il arrive qu'une fausse manipulation cause un problème sur ce serveur, et qu'il soit donc nécessaire d'en redéployer une "neuve".
 
@@ -42,7 +43,7 @@ Créons ce Blueprint :
    - Projet : **Bootcamp**
 
 #. Validez avec ``Proceed``
-
+Ò
 Notre blueprint vierge est créé, c'est un bon début.
 
 Création des variables d'application
@@ -53,7 +54,7 @@ Nous allons définir ici deux variables qui seront ensuite utilisées dans le bl
 - Initiales : pour différencier nos VMs lors de leurs déploiement
 - Registry : qui sera l'IP de la registry docker privée utilisée dans notre lab
 
-  - Nous avons besoin de la déclarer comme Registry autorisée mais non sécurisée, d'où cette variable.
+  - Nous aurons besoin de la déclarer comme Registry autorisée mais non sécurisée, d'où cette variable.
 
 #. Cliquez sur ``Application Profile > Default``
 #. Dans la partie droite de la fenêtre, à droite de variables, cliquez sur le ``+``
@@ -454,6 +455,42 @@ On peut également utiliser des scripts créés spécifiquement pour le blueprin
 
         sudo systemctl restart docker
 
+
+#. Ajouter une tâche 
+
+   - Nom : **Add K8S tools**
+   - Type : **Execute**
+   - Script Type : **Shell**
+   - Endpoint : vide
+   - Credentials : **CENTOS**
+   - Script : 
+   
+     .. code-block:: bash
+
+        #!/bin/bash
+
+        #Install Snapd
+        sudo yum install epel-release -y
+        sudo yum install snapd -y
+        sudo systemctl enable --now snapd.socket
+        sudo ln -s /var/lib/snapd/snap /snap
+
+        sudo snap version
+
+        sudo snap list
+
+        #Install Kubectl
+        sudo snap install kubectl --classic
+        kubectl version --client
+
+        #Install helm
+        sudo snap install helm --classic
+
+        #Install K9S
+        sudo snap install k9s
+
+
+
 #. Sauvegarder le blueprint avec le bouton ``Save`` en haut de la page.
 
 Actions arrêt/démarrage et relance
@@ -510,7 +547,7 @@ On recommence avec l'action ``Stop``
 
 #. Cliquez sur ``+ Task`` et configurez la tâches ainsi :
    
-   - Nom : **Start Docker**
+   - Nom : **Stop Docker**
    - Type : **Execute**
    - Script Type : **Shell**
    - Endpoint : vide
@@ -530,7 +567,7 @@ On recommence avec l'action ``Restart``
 
 #. Cliquez sur ``+ Task`` et configurez la tâches ainsi :
    
-   - Nom : **Start Docker**
+   - Nom : **Restart Docker**
    - Type : **Execute**
    - Script Type : **Shell**
    - Endpoint : vide
@@ -571,13 +608,13 @@ Créons cette action
    - Type : **Execute**
    - Script Type : **Shell**
    - Endpoint : vide
-   - Credentials : **CENTOS**
    - Script : Prenez le script ``Update CentOS`` de la bibliothèque, comme nous l'avons fait plus tôt dans ce lab.
+   - Credentials : **CENTOS**
 
 #. Sauvegardez le blueprint
 
 .. note::
-   Vous aurez noté que notre action a été créé au niveau du profil (et donc de l'application) et non au niveau du service. Quand une application est déployée, on ne peut interagir qu'avec des actions positionnées au niveau de l'application et non pas au niveau du service.
+   Vous aurez noté que notre action a été créée au niveau du profil (et donc de l'application) et non au niveau du service. Quand une application est déployée, on ne peut interagir qu'avec des actions positionnées au niveau de l'application et non pas au niveau du service.
 
    Pourquoi créer des actions au niveau du service alors ? Simplement car il est possible d'appeler ces actions propres au service depuis une action créée au niveau de l'application. C'est très pratique quand on veut utiliser plusieurs fois les mêmes tâches liées à un service, dans plusieurs actions d'application.
 
@@ -604,10 +641,10 @@ Pour éviter cet écueil, Calm dispose d'un moyen de tester le script que vous �
    
      - Cette adresse est logiquement une machine qui permet de faire des tests, ou la VM qui a été déployée dans la première exécution de votre blueprint, et qui est tombé en erreur. Ici nous utilisons cette VM hébergeant la registry pour des questions de simplicité du lab.
    
+
    - Port : **22**
    - Username : **centos**
-     
-     - Password : **nutanix/4u**
+   - Password : **nutanix/4u**
 
 #. Cliquez maintenant sur ``login and test``
 #. Vous arrivez alors sur cette fenêtre 
@@ -672,7 +709,7 @@ Pour déployer ce blueprint :
 #. Cliquez sur ``Create``
 #. Suivez le bon déroulement du déploiement, jusqu'à ce que l'application soit running.
    
-   - Cela va prendre 10 bonnes minutes, le temps que l'OS soit mis à jour
+   - Cela va prendre 5 bonnes minutes, le temps que l'OS soit mis à jour
 
 .. note::
    Vous constaterez à gauche, dans les actions disponibles sur l'application, la présence de ``Update OS`` notre action de mise à jour de la VM.
