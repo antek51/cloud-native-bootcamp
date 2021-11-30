@@ -61,7 +61,7 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
 
 #. Etape 3 : Configuration des noeuds 
 
-   - Nous allons installer le cluster Karbon sur le réseau **Secondary** 
+   - Nous allons installer le cluster Karbon sur le réseau **SECONDARY**  
    - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
 
    .. figure:: images/karbon3.jpg
@@ -113,7 +113,9 @@ Connexion au cluster Karbon
 
 #. Tester l'accès au cluster en tapant la commande ``kubectl cluster-info``. Noter l'IP du cluster et comparer avec l'information dans Prism Central > Karbon > Votre cluster. 
 
-#. Kubectl -> k 
+#. Pour nous simplifier la vie, nous utiliserons un allias permettant de **simplifier les commandes Kubectl**. Pour cela vous pouvez taper la commande ``alias k="kubectl"``. Cela vous permet de taper ``k get pods``plutôt que ``kubectl get pods``. 
+
+
 
 Utilisation de k9s
 +++++++++++++++++++++++++
