@@ -35,75 +35,76 @@ Nous allons maintenant créer notre cluster Karbon et générer le fichier de d�
 
 #. Vérifier que l'image **OS Images** est bien téléchargée. C'est l'image qui sera utiliser pour construire les machines virtuelles qui hébergeront le cluster Kubernetes. L'OS de ces VM est fournit par Nutanix qui en assure le maintient et la sécurisation. 
 
-#. Créer maintenant votre cluster Kubernetes grâce au bouton **Create Kubernetes Cluster** 
+#. Cliquer sur le menu **Clusters** à gauche et créer maintenant votre cluster Kubernetes grâce au bouton **Create Kubernetes Cluster** 
 
    .. figure:: images/karbon1.jpg
       :alt: Boutton Create
 
-#. Etape 1 : Selectionner un cluster de type **Development** pour des raisons simples de ressources disponibles sur la plateforme. 
+   - Etape 1 : Selectionner un cluster de type **Development** pour des raisons simples de ressources disponibles sur la plateforme et valider avec **Next**. 
 
-   .. note::
+     .. note::
 
-      Un cluster de type **Development** consomme une minimum de 3 VMs : 1 Master, 1 etcd, 1 Worker.
+        Un cluster de type **Development** consomme une minimum de 3 VMs : 1 Master, 1 etcd, 1 Worker.
 
-      Un cluster de type **Production** consomme un minimum de 5 VMs : 2 Master, 3 etcs, 1 Worker. 
+        Un cluster de type **Production** consomme un minimum de 5 VMs : 2 Master, 3 etcs, 1 Worker. 
 
 
-#. Etape 2 : Configuration générale
+   - Etape 2 : Configuration générale
 
-   - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user[VOTRE NUMERO]-karbon**
-   - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
-   - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
-   - Renseigner l'image Host OS à utiliser (**Selectionner la version la plus récente**)
+     - Donner un **nom** à votre cluster Kubernetes en respectant la nomenclature **user[VOTRE NUMERO]-karbon**
+     - Renseigner le cluster Nutanix qui hébergera le cluster Karbon (**ne pas modifier**)
+     - Renseigner la version de Kubernetes souhaitée (**Selectionner la version la plus récente**)
+     - Renseigner l'image Host OS à utiliser (**Selectionner la version la plus récente**)
+     - et valider avec **Next**. 
 
-   .. figure:: images/karbon2.jpg
-      :alt: Config cluster 
+     .. figure:: images/karbon2.jpg
+         :alt: Config cluster 
 
-#. Etape 3 : Configuration des noeuds 
+   - Etape 3 : Configuration des noeuds 
 
-   - Nous allons installer le cluster Karbon sur le réseau **SECONDARY**  
-   - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
+     - Nous allons installer le cluster Karbon sur le réseau **SECONDARY**  
+     - Nous laisserons les réglages par défaut des gabarits de VMs pour les différents rôles (Worker, Master, etcd)
 
-   .. figure:: images/karbon3.jpg
-      :alt: Config node 
+     .. figure:: images/karbon3.jpg
+        :alt: Config node 
 
-#. Etape 4 : Configuration du réseau interne 
+   - Etape 4 : Configuration du réseau interne 
 
-   Cette étape permet de choisir le provider CNI de notre choix. Aujourd'hui Calico et Flannel sont intégrés nativement. D'autres CNI sont étudiés pour apporter d'avantage de choix pour les clients. 
-      
-   - Choisir entre **Flannel** ou **Calico** (cela n'a pas d'impact sur la suite sur lab)
+     Cette étape permet de choisir le provider CNI de notre choix. Aujourd'hui Calico et Flannel sont intégrés nativement. D'autres CNI sont étudiés pour apporter davantage de choix. 
+         
+     - Choisir entre **Flannel** ou **Calico** (cela n'a pas d'impact sur la suite sur lab)
 
-   .. figure:: images/karbon4.jpg
-      :alt: Config CNI
+     .. figure:: images/karbon4.jpg
+        :alt: Config CNI
 
-#. Etape 5 : Configuration de l'accès au stockage 
+   - Etape 5 : Configuration de l'accès au stockage 
 
-   - Cette dernière partie va nous permettre de gérer la configuration de la couche de stockage "bloc" dont va pouvoir bénéficier le cluster Kubernetes pour les applications nécessitant du stockage persistent. (Laisser les réglages par défaut)
+     - Cette dernière partie va nous permettre de gérer la configuration de la couche de stockage "bloc" dont va pouvoir bénéficier le cluster Kubernetes pour les applications nécessitant du stockage persistent. (Laisser les réglages par défaut).
 
-   .. figure:: images/karbon5.jpg
-      :alt: Config stockage
+     .. figure:: images/karbon5.jpg
+        :alt: Config stockage
 
-#. Pour finir cliquer sur **Create** pour lancer la création du cluster. Cela devrait prendre moins de 10 minutes. Vous pouvez monitorer l'avancement et observer l'apparition de nouvelles VMs sur le cluster Nutanix. 
+   - Pour finir cliquer sur **Create** pour lancer la création du cluster. Cela devrait prendre moins de 10 minutes. Vous pouvez monitorer l'avancement et observer l'apparition de nouvelles VMs sur le cluster Nutanix. 
 
-   Notre cluster Kubernetes est en cours de création et sera livré avec : 
+     Notre cluster Kubernetes est en cours de création et sera livré avec : 
 
-   - le CNI de votre choix configuré
-   - le driver CSI permettant l'accès au stockage bloc et fichier installé 
-   - Une stack de gestion des logs EFK - ElasticSearch Fluentd Kibana permettant la gestion des logs du cluster k8s lui même 
-   - Une gestion du monitoring et des métriques (node exporter, metric server, prometheus)
+     - Le CNI de votre choix configuré
+     - Le driver CSI permettant l'accès au stockage blocs et fichiers installé 
+     - Une stack de gestion des logs EFK - ElasticSearch Fluentd Kibana permettant la gestion des logs du cluster k8s lui même 
+     - Une gestion du monitoring et des métriques (node exporter, metric server, prometheus)
 
 
 Connexion au cluster Karbon 
 +++++++++++++++++++++++++++++++++++++
-#. Vérifier que le cluster Karbon ait terminé son installation. 
+#. Vérifier que le cluster Karbon a terminé son installation. 
 
-#. Sélectionner votre cluster Karbon dans la liste et cliquer sur **Download Kubeconfig**
+#. Cocher la case correspondant à votre cluster et depuis le menu **Actions** télécharger votre fichier Kubeconfig : **Download Kubeconfig**
 
 #. Ouvrir le fichier **kubeconfig** et copier son contenu. 
 
 #. Se connecter à notre docker VM **[INITIALES]-DockerVM** en ssh. 
 
-#. Créer un dossier ``mkdir .kube``
+#. Naviguer dans le répertoire de l'utilisateur **centos** en tapant ``cd + entrée`` et créer un dossier ``mkdir .kube``
 
 #. Créer un fichier dans le répertoire courant ``vi .kube/config``, passer en mode insertion avec **i** et coller le contenu du kubeconfig file téléchargé. 
 
@@ -113,7 +114,7 @@ Connexion au cluster Karbon
 
 #. Tester l'accès au cluster en tapant la commande ``kubectl cluster-info``. Noter l'IP du cluster et comparer avec l'information dans Prism Central > Karbon > Votre cluster. 
 
-#. Pour nous simplifier la vie, nous utiliserons un allias permettant de **simplifier les commandes Kubectl**. Pour cela vous pouvez taper la commande ``alias k="kubectl"``. Cela vous permet de taper ``k get pods``plutôt que ``kubectl get pods``. 
+#. Pour nous simplifier la vie, nous utiliserons un allias permettant de **simplifier les commandes Kubectl**. Pour cela vous pouvez taper la commande ``alias k="kubectl"``. Cela vous permet de taper ``k get pods`` plutôt que ``kubectl get pods``. 
 
 
 
@@ -132,23 +133,26 @@ Il est déjà installé sur votre docker vm.
 
 #. Tester les raccourcis clavier pour naviguer dans votre cluster kubernetes simplement. 
       - Utiliser ``:`` et les objets type **pod**, **namespace**, **services**, etc pour naviguer dans les ressources.
-      - Utiliser le pavé numérique pour naviguer entre les namesspace. 
+      - Utiliser le pavé numérique pour naviguer entre les namesspace, exemple taper ``0``pour afficher les pods dans tous les namespace. 
+  
+#. Pour quitter k9s, taper ``ctrl + c``.
 
 
 Configuration de notre cluster Karbon 
 +++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 Installation du load balancer : 
 ----------------------------------------
-#. Pour interragir avec le cluster Kubernetes la cli native **kubectl** ainsi que d'autres outils. Ces outils ont été installés automatiquement sur votre machine docker. 
-Retrouver donc votre machine docker et connecter vous en ssh. 
 
-Notre cluster Kubernetes sera livré sans composant réseau tels que des load balancer, ingress controller, etc.
 
-Pour mener à bien le lab, nous aurons à minima besoin d'un load balancer, nous allons donc installer et configurer Metallb grâce à Helm. 
-Pour en savoir plus sur Helm visiter ce site : https://helm.sh/ 
+#. Pour interragir avec le cluster Kubernetes nous utiliserons la cli native **kubectl** ainsi que d'autres outils. Ces outils ont été installés automatiquement sur votre machine docker. Retrouver donc votre machine docker et se connecter en ssh. 
 
-Au préalable, nous aurons besoin de créer un fichier de configuration pour l'attribution des IPs externes à chacuns de vos load balancer Metallb. 
+   Notre cluster Kubernetes sera livré sans composant réseau tels que des load balancer, ingress controller, etc.
+
+   Pour mener à bien le lab, nous aurons à minima besoin d'un load balancer, nous allons donc installer et configurer Metallb grâce à Helm. Pour en savoir plus sur Helm visiter ce site : https://helm.sh/ 
+
+   Au préalable, nous aurons besoin de créer un fichier de configuration pour l'attribution des IPs externes à chacuns de vos load balancer Metallb. 
 
 #. Créer un fichier dans le répertoire courant ``vi configmap-metallb.yaml``
 
@@ -159,15 +163,14 @@ Au préalable, nous aurons besoin de créer un fichier de configuration pour l'a
       apiVersion: v1
       kind: ConfigMap
       metadata:
-      namespace: metallb-system
-      name: metallb
+        name: metallb
       data:
-      config: |
-         address-pools:
-         - name: default
-            protocol: layer2
-            addresses:
-            - XX.XX.XX.XX-XX.XX.XX.XX
+        config: |
+          address-pools:
+            - name: default
+              protocol: layer2
+              addresses:
+                - XX.XX.XX.XX-XX.XX.XX.XX
 
 #. Taper **ESC** pour terminer l'édition et sauvegarde avec **:wq**.
 
@@ -192,12 +195,13 @@ Notre cluster Karbon doit pouvoir accéder à notre bibliothèque d'image intern
 
 #. La commande suivante permet de se logger sur la CLI de Karbon (Karbonctl) : ``./karbon/karbonctl login --pc-username admin --pc-password nx2Tech123! cc``
 
-#. Ajouter la registry dans le service Karbon : ``./karbon/karbonctl registry add --name registry --url [IP-REGISTRY] --port 5000``
+#. Ajouter la registry dans le service Karbon : ``./karbon/karbonctl registry add --name registry-[n° USER] --url [IP-REGISTRY] --port 5000``
 
 #. Vérifier que la registry a bien été ajoutée : ``./karbon/karbonctl registry list``
 
-#. Ajouter la resgistry à votre cluster Karbon : ``./karbon/karbonctl cluster registry add --cluster-name [NOM-CLUSTER-KARBON] --registry-name registry``
+#. Ajouter la resgistry à votre cluster Karbon : ``./karbon/karbonctl cluster registry add --cluster-name [NOM-CLUSTER-KARBON] --registry-name registry-[n° USER]``
 
+#. Quitter la session SSH avec Prism Central. 
 
 
 Test avec une application simple 
@@ -212,13 +216,13 @@ Nous allons vérifier le bon fonctionnement de notre load balancer en déployant
       apiVersion: v1
       kind: Pod
       metadata:
-      name: whoami
-      namespace: app
-      labels:
-         app: whoami
+        name: whoami
+        namespace: whoami
+        labels:
+          app: whoami
       spec:
-      containers:
-         - name: whoami
+        containers:
+          - name: whoami
             image: containous/whoami:latest
             ports:
             - containerPort: 80
@@ -226,18 +230,18 @@ Nous allons vérifier le bon fonctionnement de notre load balancer en déployant
       apiVersion: v1
       kind: Service
       metadata:
-      name: whoami
-      namespace: app
+        name: whoami
+        namespace: whoami
       spec:
-      ports:
-         - port: 80
+        ports:
+          - port: 80
             protocol: TCP
             targetPort: 80
-      selector:
-         app: whoami
-      type: LoadBalancer
+        selector:
+          app: whoami
+        type: LoadBalancer
 
-#. Lancer le déploiement de l'application ``kubectl create ns whoami | kubectl apply -f whoami.yaml -n whoami``
+#. Lancer le déploiement de l'application ``kubectl create ns whoami | kubectl apply -f whoami.yaml``
 
 #. Vérifier la création du pod et du service dans k9s. Le service doit obtenir une IP externe du load balancer. 
 
@@ -251,7 +255,9 @@ Nous allons vérifier le bon fonctionnement de notre load balancer en déployant
 
 
 
-Avant de passer à la suite, veuillez supprimer le pod ainsi que le service précédement déployé. 
+Avant de passer à la suite, veuillez supprimer le pod ainsi que le service précédement déployé. Pour cela : 
+   - Taper ``:po``pour naviguer dans les pods et selectionner le pod "whoami" et taper ``ctrl + d``
+   - Taper ``:svc``pour naviguer dans les services et selectionner le service "whoami" et taper ``ctrl + d``
 
 
 
@@ -274,46 +280,46 @@ Pour cela il faut simplement décrire la manière avec laquelle nous souhaitons 
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-      name: fiesta-app
-      labels:
-         app: fiesta-front
+        name: fiesta-app
+        labels:
+          app: fiesta-front
       spec:
-      replicas: 1
-      selector:
-         matchLabels:
+        replicas: 1
+        selector:
+          matchLabels:
             app: fiesta-front
-      template:
-         metadata:
+        template:
+          metadata:
             labels:
-            app: fiesta-front
-         spec:
+              app: fiesta-front
+          spec:
             containers:
-            - name: fiesta-app
-               image: [IP-REGISTRY]:5000/[INITIALES]-fiesta-app:latest
-               ports:
+              - name: fiesta-app
+                image: [IP-REGISTRY]:5000/[INITIALES]-fiesta-app:latest
+                ports:
                   - containerPort: 3000
-               env:
-               - name: MARIADB_IP
+                env:
+                - name: MARIADB_IP
                   value: [REPRENDRE IP MARIADB]
       ---
       apiVersion: v1
       kind: Service
       metadata:
-      name: fiesta-app-service
+        name: fiesta-app-service
       spec:
-      type: LoadBalancer
-      selector:
-         app: fiesta-front
-      ports:
-         - name: http
-            protocol: TCP
-            port: 5001
-            targetPort: 3000
+        type: LoadBalancer
+        selector:
+          app: fiesta-front
+        ports:
+        - name: http
+          protocol: TCP
+          port: 5001
+          targetPort: 3000
       ---
       
 
       
-#. Suivez le déploiement de l'application dans k9s et notez l'adresse du service **fiesta-app-service**
+#. Lancer le déploiement de l'application avec la commande ``k apply -f fiesta-app-v2.yaml`` et suivez la création des ressources dans k9s et notez l'adresse du service **fiesta-app-service**
 
    .. figure:: images/k9s4.jpg
 
