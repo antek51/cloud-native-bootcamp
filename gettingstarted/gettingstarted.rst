@@ -60,8 +60,8 @@ Adresse Prism Central :
 
 Registry privée : 
   
-- Adresse IP : 
-- Port utilisé : 
+- Adresse IP : 10.42.108.74
+- Port utilisé : 5000
 
 
 Plage IP pour la configuration du load balancer dans le module 4 : 
