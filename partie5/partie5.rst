@@ -4,7 +4,7 @@
 5. Mise à jour de l'application au sein de la marketplace
 ---------------------------------------------------------
 
-Dans cette dernière partie du lab, nous allons mettre en oeuvre un blueprint pour déployer l'application Fiesta sous Calm, au format conteneurisé, comme nous l'avons fait manuellement dans les 2 partie précédentes. Puis nous le publierons sur la marketplace comme une nouvelle version de celui créé initialement dans ce bootcamp.
+Dans cette dernière partie du lab, nous allons mettre en oeuvre un blueprint pour déployer l'application Fiesta sous Calm, au format conteneurisé, comme nous l'avons fait manuellement dans les 2 parties précédentes. Puis nous le publierons sur la marketplace comme une nouvelle version de celui créé initialement dans ce bootcamp.
 
 Création du blueprint sous Calm
 +++++++++++++++++++++++++++++++
@@ -33,7 +33,7 @@ Réalisons cette tâche en commençant l'ajout du Cluster Karbon au sein de Calm
    - Name : **Karbon_User[Votre numéro]**
    - Provider : **Kubernetes**
    - Type : **Karbon**
-   - Cluster : **User[Votre numéro]**
+   - Cluster : **User[Votre numéro]-karbon**
 
 #. Cliquez enfin sur ``Save``
 #. Puis ``Verify``
@@ -100,6 +100,7 @@ Par manque de temps, nous allons simplement dupliquer un blueprint existant.
    - Un pod ``Fiesta-Pod`` qui n'utilise ici, qu'un conteneur appelé ``Fiesta_Container``
 
      - Le gouvernail bleu signifie qu'il s'agit d'un cluster Kubernetes
+  
 
 #. Cliquez sur pod ``Fiesta_Pod``
 
@@ -140,7 +141,9 @@ Il ne nous reste qu'a déployer notre blueprint et vérifier qu'il est fonctionn
 #. Renseignez les infos habituelles :
 
    - Nom de l'application : **[Vos intiales]-Fiesta-Karbon-Test**
+   
    - Vos initiales : **[Vos initiales]**
+
 
 
 #. Lancez le déploiement avec ``Deploy``
@@ -210,7 +213,7 @@ Publions maintenant sur la Marketplace cette nouvelle version de l'application.
 Vous avez terminé et bouclé la boucle : 
 
 - Vous avez publié une application web utilisant 2 VM
-- Puis vous l'avez transformée qu'une de ces VM soit remplacée par des conteneurs. Cette
+- Puis vous l'avez transformée pour qu'une de ces VM soit remplacée par des conteneurs.
 - Vous avez créé un déploiement automatique de cette nouvelle application par Calm
 - Pour conclure, vous avez mis à jour la Marketplace pour utiliser la nouvelles version de d'application.
 
