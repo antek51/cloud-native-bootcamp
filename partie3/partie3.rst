@@ -4,7 +4,7 @@
 3. Conteneurisation de l'application
 ------------------------------------------------
 
-Les conteneurs sont utilisés comme moyen pour délivrer des packages de logiciels qui incluent le code ainsi que toutes les dépendances dans une image. Cela permet à l'application d'être portable et ainsi d'être utilisé dans plusieurs environnements différents. 
+Les conteneurs sont utilisés comme moyen pour délivrer des packages de logiciels qui incluent le code ainsi que toutes les dépendances dans une image. Cela permet à l'application d'être portable et ainsi d'être utilisée dans plusieurs environnements différents. 
 
 Dans cette section, nous allons **convertir l'application "Fiesta" en conteneur** pour être ensuite hébergée dans un cluster Kubernetes en lieu et place d'un hébergement traditionnel en machine virtuelle. 
 
@@ -20,12 +20,12 @@ Nous utiliserons :
 
 - **Docker build** pour réaliser le travail de construction de l'image.
 
-- Une **registry** permettant de mettre à disposition l'image dans une "bibliothèque" d'images privées
+- Une **registry** (comprendre, une zone de stockage des images docker) permettant de mettre à disposition l'image dans une "bibliothèque" d'images privées. 
 
 
 Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé préalablement. 
 
-#. Dans **PrismCentral**, naviguer dans le service **Calm** puis votre application déployée **[Initiales]_DockerVM**
+#. Dans **PrismCentral**, naviguer dans le service **Calm** puis votre application déployée **[Initiales]-DockerVM**
 
 #. Cliquer sur **Services** puis sur l'icône pour obtenir l'adresse IP 
 
@@ -128,18 +128,27 @@ Nous allons maintenant utiliser la machine "Docker VM" que vous avez créé pré
    .. figure:: images/docker2.jpg  
 
 
-#. Il est temps de construire son image docker avec la commande suivante : ``docker build -t [INITIALES]-fiesta-app --no-cache .``
+#. Il est temps de construire son image docker avec la commande suivante : ``docker build -t [initiales]-fiesta-app --no-cache .`` 
+
+   .. note:: 
+      Vos initiales doivent être en minuscule pour éviter une erreur.
+
+      Ne pas tenir compte des messages d'erreur ou warning lors du build. Il s'agit de package qui sont ou vont bientôt être dépréciés. 
+
 
 #. La commande ``docker image ls`` indique que l'image a bien été créée. 
 
-Dans les organisations, l'utilisation d'une registry privée est conseillée pour des raisons de sécurité et de contrôle. 
+   Dans les organisations, l'utilisation d'une registry privée est conseillée pour des raisons de sécurité et de contrôle. 
+
+   .. figure:: images/docker3.jpg  
+
 
 #. Nous allons maintenant pousser l'application dans la registry pour permettre de l'utiliser depuis notre cluster Karbon avec les commandes : 
 
-   - ``docker tag [INITIALES]-fiesta-app [IP-REGISTRY]:5000/[INITIALES]-fiesta-app``
-   - ``docker push [IP-REGISTRY]:5000/[INITIALES]-fiesta-app``
+   - ``docker tag [initiales]-fiesta-app [IP-REGISTRY]:5000/[initiales]-fiesta-app``
+   - ``docker push [IP-REGISTRY]:5000/[initiales]-fiesta-app``
 
-#. Avant de passer à l'étape suivante, il est utile de tester le conteneur grâce à la commande ``docker run -d --rm -p 5001:3000 --env MARIADB_IP=[IP_MARIADB] --name=[INITIALES]-fiesta-app [IP-REGISTRY]:5000/[INITIALES]-fiesta-app:latest``
+#. Avant de passer à l'étape suivante, il est utile de tester le conteneur grâce à la commande ``docker run -d --rm -p 5001:3000 --env MARIADB_IP=[IP_MARIADB] --name=[initiales]-fiesta-app [IP-REGISTRY]:5000/[initiales]-fiesta-app:latest``
 
    .. note::
       La variable [IP_MARIADB] est à récupérer dans Calm. 
@@ -153,7 +162,7 @@ Dans les organisations, l'utilisation d'une registry privée est conseillée pou
    .. figure:: images/fiesta.jpg  
 
 
-#. Stopper le conteneur grâce à la commande ``docker stop [INITIALES]-fiesta-app``
+#. Stopper le conteneur grâce à la commande ``docker stop [initiales]-fiesta-app``
 
 
 

@@ -33,7 +33,7 @@ Déploiement du dashboard et ressources associées
    .. image:: images/dash02.png
       :alt: namespace 
 
-#. Nous allons utiliser un autre mécanisme pour joindre l'application que celui utilisé avec l'application Fiesta. La ressource "Port Forward" est une ressource très utile dans le contexte Kubernetes car il permet notamment de pouvoir joindre depuis l'extérieur n'importe quel pod ou service directement. Cela est donc très utile lors des phases de troubleshooting et permet de mettre en lumière le maillon défaillant de la chaine de liaison. 
+#. Nous allons utiliser un autre mécanisme pour joindre l'application que celui utilisé avec l'application Fiesta dans le lab précédent (Load Balancer). La ressource "Port Forward" est une ressource très utile dans le contexte Kubernetes car il permet notamment de pouvoir joindre depuis l'extérieur n'importe quel pod ou service directement. Cela est donc très utile lors des phases de troubleshooting et permet de mettre en lumière le maillon défaillant de la chaine de liaison. 
 
 Pour cela dans k9s, se positionner sur le pod **kubernetes-dashboard-[ID UNIQUE]** et pressez les touches ``shift + f``. 
 
