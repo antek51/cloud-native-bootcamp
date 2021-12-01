@@ -46,13 +46,13 @@ Ressources
 
 Adresse Prism Central : 
 
-- Cluster 1 = user01 au user15 
-
+- Cluster 1 (POC007) = user01 au user15 
+    - Adresse : https://10.42.7.39:9440/
     - Login : ``admin``
     - Password : ``nx2Tech123!``
 
-- Cluster 2 = user01 au user15
-
+- Cluster 2 (POC024) = user01 au user15
+    - Adresse : https://10.42.24.39:9440/
     - Login : ``admin``
     - Password : ``nx2Tech123!``
 
