@@ -33,16 +33,40 @@ Déploiement du dashboard et ressources associées
    .. image:: images/dash02.png
       :alt: namespace 
 
-#. Nous allons utiliser un autre mécanisme pour joindre l'application que celui utilisé avec l'application Fiesta dans le lab précédent (Load Balancer). La ressource "Port Forward" est une ressource très utile dans le contexte Kubernetes car il permet notamment de pouvoir joindre depuis l'extérieur n'importe quel pod ou service directement. Cela est donc très utile lors des phases de troubleshooting et permet de mettre en lumière le maillon défaillant de la chaine de liaison. 
 
-Pour cela dans k9s, se positionner sur le pod **kubernetes-dashboard-[ID UNIQUE]** et pressez les touches ``shift + f``. 
+#. Nous allons utiliser un service pour exposer le dashboard à l'extérieur du cluster. Créer un fichier dans le répertoire de l'utilisateur avec la commande ``cd + entrée`` suivi de ``vi svc-dashboard.yaml``
 
-#. Une nouvelle fenêtre va apparaitre qui permet de modifier les paramètres du port forward. Noter le n° du port proposé et valider la création du port forward. 
+#. Copier le code suivant dans le fichier en utilisant la fonction **insert** de **vi**. 
 
-   .. image:: images/pf.jpg
-      :alt: port forward  
+   .. code-block:: yaml
 
-#. Sur votre navigateur naviguer vers ``https://localhost:[NUM PORT FORWARD]/`` et utiliser la méthode d'authentification **Kubeconfig**. Pour cela retrouver votre fichier Kubeconfig et cliquer sur **Sign In**. 
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: kubernetes-dashboard-lb
+        namespace: kubernetes-dashboard
+      spec:
+        type: LoadBalancer
+        ports:
+          - port: 443
+            protocol: TCP
+            targetPort: 8443
+        selector:
+          k8s-app: kubernetes-dashboard
+
+
+#. Taper **ESC** puis ``:wq`` pour quitter et sauvegarde le fichier. 
+
+#. Utiliser la commande kubectl pour déployer la ressource : ``kubectl apply -f svc-dashboard.yaml``
+
+#. Dans k9s, un nouveau service avec une IP externe apparait. 
+
+      .. image:: images/dash10.jpg
+      :alt: dash 
+
+
+#. Sur votre navigateur naviguer vers ``https://[IP DU LOADBALANCER]`` et utiliser la méthode d'authentification **Kubeconfig**. Pour cela retrouver votre fichier Kubeconfig et cliquer sur **Sign In**. 
 
    .. image:: images/dash03.jpg
       :alt: Dashboard UI  
@@ -50,12 +74,9 @@ Pour cela dans k9s, se positionner sur le pod **kubernetes-dashboard-[ID UNIQUE]
 
 #. Vous êtes ainsi connecté au Dashboard Officiel de Kubernetes. Parcourez les menus et comparer l'expérience avec k9s. 
 
-   .. image:: images/dash04.png
+   .. image:: images/dash04.jpg
       :alt: Dashboard UI 2  
 
-
-
-#. Pensez à terminer de **Port Forward** sinon la ressource restera joignable. Pour cela dans k9s taper ``:portforward`` suivit de ``ctrl + d`` pour le supprimer. 
 
 
 
