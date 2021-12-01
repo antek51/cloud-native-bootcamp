@@ -21,7 +21,7 @@ Automatisation & Cloud Native
 ---------------------------------
 
 Description du bootcamp et des objectifs : 
-++++++
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 Au travers de cet atelier, découvrez comment automatiser le déploiement d'applications issues de ces 2 mondes.
 

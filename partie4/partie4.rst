@@ -133,7 +133,7 @@ Il est déjà installé sur votre docker vm.
 
 #. Tester les raccourcis clavier pour naviguer dans votre cluster kubernetes simplement. 
       - Utiliser ``:`` et les objets type **pod**, **namespace**, **services**, etc pour naviguer dans les ressources.
-      - Utiliser le pavé numérique pour naviguer entre les namesspace, exemple taper ``0``pour afficher les pods dans tous les namespace. 
+      - Utiliser le pavé numérique pour naviguer entre les namesspace, exemple taper ``0`` pour afficher les pods dans tous les namespace. 
   
 #. Pour quitter k9s, taper ``ctrl + c``.
 
@@ -209,7 +209,7 @@ Test avec une application simple
 
 Nous allons vérifier le bon fonctionnement de notre load balancer en déployant une simple application. Elle devrait normalement récupérer une adresse IP et être joignable depuis l'extérieur. 
 
-#. Créer un fichier ``vi whoami.yaml``et coller le contenu YAML ci dessous : 
+#. Créer un fichier ``vi whoami.yaml`` et coller le contenu YAML ci dessous : 
 
    .. code-block:: yaml
 
