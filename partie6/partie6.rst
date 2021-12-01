@@ -62,7 +62,7 @@ Déploiement du dashboard et ressources associées
 
 #. Dans k9s, un nouveau service avec une IP externe apparait. 
 
-      .. image:: images/dash10.jpg
+   .. image:: images/dash10.jpg
       :alt: dash 
 
 
@@ -77,6 +77,7 @@ Déploiement du dashboard et ressources associées
    .. image:: images/dash04.jpg
       :alt: Dashboard UI 2  
 
+   Naviguer par exemple dans la rubrique **Storage Class** afin de constater l'utilisation du driver CSI et de ses paramètres. 
 
 
 
